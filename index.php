@@ -11,8 +11,8 @@ require_once __DIR__ . '/src/DB.php';
 DB::getConnection($config);
 $page = $_GET['page'] ?? 'trang-chu';
 $routes = [
-    'trang-chu'  => __DIR__ . '/src/Controllers/trangchu.php',
-    'dang-nhap'  => __DIR__ . '/src/Controllers/QuanLyTaiKhoan/dangnhap.php',
+    'trang-chu'  => __DIR__ . '/src/Controllers/trang-chu.php',
+    'dang-nhap'  => __DIR__ . '/src/Controllers/tai-khoan/dang-nhap.php',
 ];
 
 if (array_key_exists($page, $routes) && file_exists($routes[$page])) {
