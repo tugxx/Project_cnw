@@ -1,0 +1,13 @@
+<?php 
+if (!defined('ALLOW_ACCESS')) {
+    header("HTTP/1.1 404 Not Found");
+    exit;
+}
+
+if (isset($_SESSION['user'])) {
+    forceLogout();
+}
+
+header('Location: /index.php?page=dang-nhap');
+exit;
+?>

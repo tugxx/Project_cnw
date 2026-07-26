@@ -56,3 +56,8 @@ Project_cnw/
     ├── quan-tri/
     ├── 404.php                 # Trang báo lỗi 404
     └── trang-chu.php           # Giao diện Trang chủ
+
+
+## Tải thư viện 
+- Trong terminal của laragon, cd đến thư mục project: 
+    composer require phpmailer/phpmailer

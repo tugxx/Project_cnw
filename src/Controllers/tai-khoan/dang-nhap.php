@@ -4,4 +4,59 @@ if (!defined('ALLOW_ACCESS')) {
     exit();
 }
 
+if (isset($_SESSION['user'])) {
+    header('Location: index.php');
+    exit;
+}
+
+$errors = []; 
+$loginInput = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $loginInput = trim($_POST['login_input'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    if (empty($loginInput)) {
+        $errors['login_input'] = 'Vui lòng nhập Email hoặc Tên đăng nhập.';
+    }
+
+    if (empty($password)) {
+        $errors['password'] = 'Vui lòng nhập mật khẩu.';
+    }
+
+    if (empty($errors)) {
+        try {
+            if (filter_var($loginInput, FILTER_VALIDATE_EMAIL)) {
+                $loginType = 'email';
+            } else {
+                $loginType = 'username';
+            }
+
+            $sql = "SELECT `id`, `username`, `email`, `password`, `role`, `is_active` 
+                    FROM `users` 
+                    WHERE `{$loginType}` = ? 
+                    LIMIT 1";
+            $user = DB::fetchOne($sql, [$loginInput]);
+
+            if (!$user || !password_verify($password, $user['password'])) {
+                $errors['auth'] = 'Tên đăng nhập hoặc mật khẩu không chính xác.';
+            } elseif (!$user['is_active']) {
+                $errors['auth'] = 'Tài khoản của bạn đã bị khóa.';
+            } else {
+                session_regenerate_id(true);
+                $_SESSION['user'] = [
+                    'id'       => $user['id'],
+                    'role'     => $user['role']
+                ];
+                header('Location: index.php');
+                exit;
+            }
+        } catch (PDOException $e) {
+            $errors['system'] = 'Lỗi hệ thống, vui lòng thử lại sau.';
+            error_log($e->getMessage()); 
+        }
+    }
+} 
+
+require_once __DIR__ . '/../../../views/tai-khoan/dang-nhap.php';
 ?>

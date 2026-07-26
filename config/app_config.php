@@ -4,7 +4,7 @@ if (!defined('ALLOW_ACCESS')) {
     exit();
 }
 
-$envPath = __DIR__ . '/../.env.php';
+$envPath = __DIR__ . '/../.env';
 $env = file_exists($envPath) ? parse_ini_file($envPath) : [];
 return $env;
 ?>
