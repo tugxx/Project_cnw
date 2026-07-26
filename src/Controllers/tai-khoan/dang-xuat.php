@@ -5,9 +5,9 @@ if (!defined('ALLOW_ACCESS')) {
 }
 
 if (isset($_SESSION['user'])) {
-    forceLogout();
+    destroyUserSession();
 }
 
-header('Location: /index.php?page=dang-nhap');
+header('Location: dang-nhap');
 exit;
 ?>

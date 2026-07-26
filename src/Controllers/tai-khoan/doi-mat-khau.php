@@ -17,8 +17,8 @@ $sql = "SELECT `id`, `password`, `is_active`
         WHERE `id` = ?";
 $user = DB::fetchOne($sql, [$userId]);
 if (!$user || !$user["is_active"]) {
-    forceLogout();
-    showPopUp('Tài khoản của bạn không tồn tại hoặc đã bị khoá.', 'index.php?page=dang-nhap', 'error');
+    destroyUserSession();
+    showPopUp('Tài khoản của bạn không tồn tại hoặc đã bị khoá.', 'dang-nhap', 'error');
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -59,4 +59,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } 
 
+require_once __DIR__ . '/../../../views/layouts/header.php';
 require_once __DIR__ . '/../../../views/tai-khoan/doi-mat-khau.php';

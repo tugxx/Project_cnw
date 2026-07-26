@@ -1,0 +1,174 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f5f7;
+    color: #222;
+}
+
+.site-header {
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.site-header__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.site-header__left,
+.site-header__right {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.site-header__brand {
+    font-weight: 700;
+    font-size: 18px;
+    text-decoration: none;
+    color: #2563eb;
+}
+
+.site-header__nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+.site-header__nav a {
+    text-decoration: none;
+    color: #4b5563;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.site-header__nav a:hover,
+.site-header__nav a.active {
+    color: #2563eb;
+}
+
+.site-header__auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-auth {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.btn-auth--login {
+    color: #374151;
+}
+
+.btn-auth--login:hover {
+    background: #f3f4f6;
+    color: #2563eb;
+}
+
+.btn-auth--register {
+    background: #2563eb;
+    color: #fff;
+}
+
+.btn-auth--register:hover {
+    background: #1d4ed8;
+}
+
+.user-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.user-menu__trigger {
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.user-menu__trigger:hover {
+    background: #f3f4f6;
+}
+
+.user-menu__dropdown {
+    display: none; /* Mặc định ẩn, bật lên bằng CSS hover hoặc JS */
+    position: absolute;
+    right: 0;
+    top: 100%;
+    width: 200px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    margin: 4px 0 0 0;
+    padding: 8px 0;
+    z-index: 100;
+}
+
+.user-menu:hover .user-menu__dropdown {
+    display: block;
+}
+
+.user-menu__dropdown li a {
+    display: block;
+    padding: 10px 16px;
+    color: #374151;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.user-menu__dropdown li a:hover {
+    background: #f3f4f6;
+    color: #2563eb;
+}
+
+.user-menu__dropdown .divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 6px 0;
+}
+
+.site-main {
+    max-width: 1200px;
+    margin: 32px auto;
+    padding: 0 24px;
+}
+
+.user-menu__dropdown .logout-link {
+    color: #dc2626 !important;
+}
+
+.user-menu__dropdown .logout-link:hover {
+    background: #fef2f2;
+}

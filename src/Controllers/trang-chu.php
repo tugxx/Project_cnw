@@ -4,6 +4,10 @@ if (!defined('ALLOW_ACCESS')) {
     exit();
 }
 
+if (!isset($_SESSION['user'])) {
+    header('Location: dang-nhap');
+    exit;
+}
 
-echo "Xin chào";
+require_once __DIR__ . '/../../views/layouts/header.php';
 ?>

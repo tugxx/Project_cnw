@@ -15,13 +15,13 @@ $sql = "SELECT rt.email, rt.token, rt.created_at, u.is_active
         LIMIT 1";
 $resetRecord = DB::fetchOne($sql, [$token]);
 
-// if (!$resetRecord || (strtotime($resetRecord['created_at']) + RESET_TOKEN_TTL) < time()) {
-//     showPopUp('Liên kết khôi phục mật khẩu không hợp lệ hoặc đã hết hạn.', 'dang-nhap', 'error');
-// }
+if (!$resetRecord || (strtotime($resetRecord['created_at']) + RESET_TOKEN_TTL) < time()) {
+    showPopUp('Liên kết khôi phục mật khẩu không hợp lệ hoặc đã hết hạn.', 'dang-nhap', 'error');
+}
 
-// if (!$resetRecord['is_active']) {
-//     showPopUp('Tài khoản của bạn đang bị khóa.', 'dang-nhap', 'error');
-// }
+if (!$resetRecord['is_active']) {
+    showPopUp('Tài khoản của bạn đang bị khóa.', 'dang-nhap', 'error');
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errors)) {
     $newPassword     = trim($_POST['new_password'] ?? '');
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errors)) {
                 SET `token` = 'USED'
                 WHERE `email` = ?";
         DB::execute($sql, [$resetRecord['email']]);
-        forceLogout();
+        destroyUserSession();
         showPopUp('Đặt lại mật khẩu thành công.', 'dang-nhap', 'success');
     }
 }

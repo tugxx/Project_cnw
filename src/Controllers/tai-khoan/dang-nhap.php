@@ -5,7 +5,7 @@ if (!defined('ALLOW_ACCESS')) {
 }
 
 if (isset($_SESSION['user'])) {
-    header('Location: index.php');
+    header('Location: /Project_cnw');
     exit;
 }
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $loginType = 'username';
             }
 
-            $sql = "SELECT `id`, `username`, `email`, `password`, `role`, `is_active` 
+            $sql = "SELECT `id`, `username`, `email`, `password`, `role`, `is_active`, `name`, `class`
                     FROM `users` 
                     WHERE `{$loginType}` = ? 
                     LIMIT 1";
@@ -45,8 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 session_regenerate_id(true);
                 $_SESSION['user'] = [
-                    'id'       => $user['id'],
-                    'role'     => $user['role']
+                    'id' => $user['id'],
+                    'role' => $user['role'],
+                    'name' => $user['name'],
+                    'class' => $user['class'],
                 ];
                 header('Location: index.php');
                 exit;

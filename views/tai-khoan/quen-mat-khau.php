@@ -1,151 +1,49 @@
 <?php
-if (!defined('ALLOW_ACCESS')) {
-    header("HTTP/1.1 404 Not Found");
-    exit;
-}
+    $emailValue = $_POST['email'] ?? '';
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quên mật khẩu</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f5f7;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .box {
-            background: #fff;
-            width: 100%;
-            max-width: 400px;
-            padding: 32px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        h1 {
-            font-size: 20px;
-            margin: 0 0 8px;
-            text-align: center;
-        }
-
-        p.desc {
-            font-size: 14px;
-            color: #666;
-            text-align: center;
-            margin: 0 0 24px;
-        }
-
-        label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 6px;
-            color: #333;
-        }
-
-        input[type="email"] {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 16px;
-            background: #2563eb;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 15px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #1d4ed8;
-        }
-
-        .alert {
-            padding: 10px 12px;
-            border-radius: 4px;
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-
-        .alert-error {
-            background: #fdecea;
-            color: #b91c1c;
-        }
-
-        .alert-success {
-            background: #eafaf0;
-            color: #15803d;
-        }
-
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 16px;
-            font-size: 14px;
-        }
-
-        .back-link a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
-<body>
-    <div class="box">
-        <h1>Quên mật khẩu</h1>
-        <p class="desc">Nhập email đã đăng ký để nhận liên kết đặt lại mật khẩu.</p>
+<body style="background: #f3f4f6; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 16px; box-sizing: border-box;">
+    <div style="max-width: 400px; width: 100%; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); border: 1px solid #f3f4f6; padding: 32px; box-sizing: border-box;">
+        <div style="text-align: center; margin-bottom: 24px;">
+            <h2 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 8px 0;">Quên mật khẩu</h2>
+            <p style="font-size: 13px; color: #6b7280; margin: 0; line-height: 1.5;">Nhập email đã đăng ký để nhận liên kết đặt lại mật khẩu</p>
+        </div>
 
-        <?php if (!empty($errors)): ?>
-            <?php foreach ($errors as $error): ?>
-                <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <?php 
+        if (!empty($success)) {
+            renderAlert($success, 'success');
+        }
 
-        <?php if (!empty($success)): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-        <?php endif; ?>
+        if (!empty($errors)) {
+            foreach ($errors as $err) {
+                renderAlert($err, 'error');
+            }
+        }
+        ?>
 
         <?php if (empty($success)): ?>
-            <form method="POST" action="">
-                <label for="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="abc@example.com"
-                    value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                    required
-                >
-                <button type="submit">Gửi yêu cầu</button>
+            <form action="" method="POST">
+                <?php 
+                    renderInput('email', 'Email đăng ký', 'email', $emailValue, '', 'abc@example.com', true);
+                    renderButton('Gửi yêu cầu đặt lại', 'submit');
+                ?>
             </form>
         <?php endif; ?>
 
-        <div class="back-link">
-            <a href="dang-nhap">Quay lại đăng nhập</a>
+        <div style="text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid #f3f4f6;">
+            <a href="dang-nhap" style="font-size: 13px; color: #2563eb; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 4px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                <span style="font-size: 14px;">←</span> Quay lại đăng nhập
+            </a>
         </div>
+
     </div>
+
 </body>
 </html>
