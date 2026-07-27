@@ -9,5 +9,6 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
+require_once __DIR__ . '/../../views/trang-chu.php';
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>

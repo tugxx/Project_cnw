@@ -4,7 +4,7 @@ function renderInput($name, $label, $type = 'text', $value = '', $error = '', $p
     $borderColor = !empty($error) ? '#ef4444' : '#d1d5db';
     $reqBadge = $required ? '<span style="color:#ef4444;">*</span>' : '';
     
-    $paddingRight = ($showToggle && $type === 'password') ? '40px' : '14px';
+    // $paddingRight = ($showToggle && $type === 'password') ? '40px' : '14px';
 
     echo "
     <div style='margin-bottom: 18px;'>
@@ -37,8 +37,7 @@ function renderInput($name, $label, $type = 'text', $value = '', $error = '', $p
                 '
                 style='position: absolute; right: 12px; background: none; border: none; padding: 0; margin: 0; color: #9ca3af; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px;'
                 onmouseover='this.style.color=\"#4b5563\"'
-                onmouseout='this.style.color=\"#9ca3af\"'
-        >
+                onmouseout='this.style.color=\"#9ca3af\"'>
             <i class='fa-solid fa-eye'></i>
         </button>";
     }

@@ -20,16 +20,16 @@ $errors = $errors ?? [];
             ?>
 
         <div style="position: relative;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: -22px; position: relative; z-index: 1;">
+            <?php renderInput('password', 'Mật khẩu', 'password', '', $errors['password'] ?? '', '', true, true); ?>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: -10px; position: relative; z-index: 1;">
                 <span style="font-size: 14px; opacity: 0;"></span>
                 <a href="quen-mat-khau" style="font-size: 13px; color: #2563eb; text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
                     Quên mật khẩu?
                 </a>
             </div>
-            <?php renderInput('password', 'Mật khẩu', 'password', '', $errors['password'] ?? '', '', true, true); ?>
         </div>
 
-        <div style="margin-top: 24px;">
+        <div style="margin-top: 18px;">
             <?php renderButton('Đăng nhập', 'submit'); ?>
         </div>
         </form><br>

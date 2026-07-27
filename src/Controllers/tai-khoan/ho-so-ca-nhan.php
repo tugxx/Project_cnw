@@ -1,6 +1,7 @@
 <?php
 if (!defined('ALLOW_ACCESS')) {
-    exit('Truy cập trực tiếp không được phép.');
+    header("HTTP/1.1 404 Not Found");
+    exit();
 }
 
 if (!isset($_SESSION['user'])) {
@@ -9,7 +10,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 $userId = $_SESSION['user']['id'];
-$sql = "SELECT `id`, `email`, `name`, `dob`, `class`, `role`, `avatar`, `is_active` 
+$sql = "SELECT `id`, `email`, `full_name`, `dob`, `class`, `role`, `avatar`, `is_active` 
         FROM users 
         WHERE id = ?";
 $user = DB::fetchOne($sql, [$userId]);

@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $loginType = 'username';
             }
 
-            $sql = "SELECT `id`, `username`, `email`, `password`, `role`, `is_active`, `name`, `class`
+            $sql = "SELECT `id`, `username`, `email`, `password`, `role`, `is_active`, `full_name`, `class`
                     FROM `users` 
                     WHERE `{$loginType}` = ? 
                     LIMIT 1";
@@ -47,10 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user'] = [
                     'id' => $user['id'],
                     'role' => $user['role'],
-                    'name' => $user['name'],
+                    'full_name' => $user['full_name'],
                     'class' => $user['class'],
                 ];
-                header('Location: index.php');
+                header('Location: /Project_cnw');
                 exit;
             }
         } catch (PDOException $e) {

@@ -1,0 +1,123 @@
+.import-form {
+    margin-top: 20px;
+}
+
+.form-group-file {
+    margin-bottom: 20px;
+}
+
+.import-container {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 0 16px;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.import-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 24px;
+}
+
+.guide-section {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.guide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.guide-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #334155;
+    margin: 0;
+}
+
+.btn-download-sample {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background-color: #0284c7;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.btn-download-sample:hover {
+    background-color: #0369a1;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.sample-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+    background-color: #ffffff;
+}
+
+.sample-table th,
+.sample-table td {
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.sample-table th {
+    background-color: #f8fafc;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+.sample-table td {
+    color: #475569;
+}
+
+.form-error-msg {
+    color: #dc2626;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background-color: #fef2f2;
+    border-left: 4px solid #ef4444;
+    border-radius: 4px;
+}
+
+.upload-box {
+    margin-top: 20px;
+}
+
+.file-input-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.upload-inputs {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.upload-inputs > div {
+    flex: 1;
+    margin-bottom: 0 !important;
+}

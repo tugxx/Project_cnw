@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        $sql = "SELECT id, username, email, is_active 
+        $sql = "SELECT id, username, email, is_active, `full_name`
                 FROM users 
                 WHERE email = ? 
                 LIMIT 1";
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $resetLink = rtrim($config['APP_URL'] ?? '', '/')
                     . '/dat-lai-mat-khau&token=' . urlencode($token);
 
-                guiEmailKhoiPhucMatKhau($email, $user['name'], $resetLink, $config);
+                guiEmailKhoiPhucMatKhau($email, $user['full_name'], $resetLink, $config);
             }
         }
 
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 
-function guiEmailKhoiPhucMatKhau($email, $name, $resetLink, $config)
+function guiEmailKhoiPhucMatKhau($email, $fullName, $resetLink, $config)
 {
     $mail = new PHPMailer(true);
     try {
@@ -63,9 +63,9 @@ function guiEmailKhoiPhucMatKhau($email, $name, $resetLink, $config)
         $mail->Port       = $config['MAIL_PORT'];
 
         $mail->setFrom($config['MAIL_USER'], 'Hệ thống');
-        $mail->addAddress($email, $name);
+        $mail->addAddress($email, $fullName);
         $mail->Subject = 'Yêu cầu khôi phục mật khẩu';
-        $mail->Body = "Xin chào {$name},\n\n"
+        $mail->Body = "Xin chào {$fullName},\n\n"
             . "Nhấn vào liên kết sau để đặt lại mật khẩu (hiệu lực trong 15 phút):\n"
             . "{$resetLink}\n\n"
             . "Nếu bạn không yêu cầu việc này, vui lòng bỏ qua email.";
