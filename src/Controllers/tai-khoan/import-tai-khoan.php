@@ -29,7 +29,9 @@ if ($user['role'] !== 'admin') {
 
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_FILES['excel_file']) || $_FILES['excel_file']['error'] !== UPLOAD_ERR_OK) {
+    if (!isset($_FILES['excel_file']) || $_FILES['excel_file']['error'] === UPLOAD_ERR_NO_FILE) {
+        $errors[] = 'Bạn chưa chọn file';
+    } elseif ($_FILES['excel_file']['error'] !== UPLOAD_ERR_OK) {
         $errors[] = 'Quá trình tải file bị lỗi';
     } else {
         $fileTmpPath = $_FILES['excel_file']['tmp_name'];

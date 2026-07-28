@@ -1,13 +1,11 @@
 <?php
 
-function renderInput($name, $label, $type = 'text', $value = '', $error = '', $placeholder = '', $required = false, $showToggle = false) {
+function renderInput($name, $label, $type = 'text', $value = '', $error = '', $placeholder = '', $required = false, $showToggle = false, $wrapperStyle = '' ) {
     $borderColor = !empty($error) ? '#ef4444' : '#d1d5db';
     $reqBadge = $required ? '<span style="color:#ef4444;">*</span>' : '';
-    
-    // $paddingRight = ($showToggle && $type === 'password') ? '40px' : '14px';
 
     echo "
-    <div style='margin-bottom: 18px;'>
+    <div style='margin-bottom: 18px; {$wrapperStyle}'>
         <label for='{$name}' style='display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px;'>
             {$label} {$reqBadge}
         </label>

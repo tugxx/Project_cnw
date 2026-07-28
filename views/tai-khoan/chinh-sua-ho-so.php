@@ -1,6 +1,6 @@
 <?php
 $avatarSrc = !empty($user['avatar'])
-    ? '/Project_cnw/assets/uploads/avatars/' . htmlspecialchars($user['avatar'])
+    ? '/Project_cnw/storage/uploads/avatars/' . htmlspecialchars($user['avatar'])
     : '/Project_cnw/assets/media/default-avatar.jpg';
 
 $roleName = $user['role'] ?? 'Sinh viên';

@@ -1,6 +1,6 @@
 <?php
 $avatarSrc = !empty($user['avatar'])
-    ? '/Project_cnw/assets/uploads/avatars/' . htmlspecialchars($user['avatar'])
+    ? '/Project_cnw/storage/uploads/avatars/' . htmlspecialchars($user['avatar'])
     : '/Project_cnw/assets/media/default-avatar.jpg';
 
 $dobFormatted = !empty($user['dob']) ? date('d/m/Y', strtotime($user['dob'])) : '---';

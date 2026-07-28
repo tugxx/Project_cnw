@@ -11,7 +11,7 @@ if (!isset($_SESSION['user']['id'])) {
 
 $userId = $_SESSION['user']['id'];
 $sql = "SELECT `id`, `full_name`, `dob`, `avatar`, `is_active`, `email`, `role`
-        FROM users 
+        FROM users
         WHERE id = ?";
 $user = DB::fetchOne($sql, [$userId]);
 
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Dung lượng ảnh tối đa là 2MB.';
             } else {
                 $fileName = 'avatar_' . $userId . '_' . time() . '.' . $fileExtension;
-                $uploadDir = __DIR__ . '/../../../assets/uploads/avatars/';
+                $uploadDir = __DIR__ . '/../../../storage/uploads/avatars/';
                 $targetPath = $uploadDir . $fileName;
                 if (move_uploaded_file($file['tmp_name'], $targetPath)) {
                     if (!empty($currentAvatar) && file_exists($uploadDir . $currentAvatar)) {

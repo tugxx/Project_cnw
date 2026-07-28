@@ -3,8 +3,13 @@ function getSortUrl($columnName, $routeName = 'danh-sach-tai-khoan') {
     $currentSort  = $_GET['sort_by'] ?? '';
     $currentOrder = strtolower($_GET['sort_order'] ?? '');
 
-    $params = $_GET;
-    unset($params['page']);
+    $allowedQueryKeys = ['search', 'role', 'status', 'sort_by', 'sort_order'];
+    $params = [];
+    foreach ($allowedQueryKeys as $key) {
+        if (isset($_GET[$key]) && $_GET[$key] !== '') {
+            $params[$key] = $_GET[$key];
+        }
+    }
     $params['page_num'] = 1; 
     $direction = 'none';
 

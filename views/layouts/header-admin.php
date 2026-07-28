@@ -52,6 +52,8 @@
     <nav class="sidebar-nav" id="sidebarNav">
         <ul class="sidebar-nav__list">
             <li><a href="/Project_cnw">Trang chủ</a></li>
+            <li><a href="/Project_cnw/them-tai-khoan">Thêm tài khoản</a></li>
+            <li><a href="/Project_cnw/import-tai-khoan">Import tài khoản</a></li>
             <li><a href="/Project_cnw/danh-sach-tai-khoan">Tài khoản</a></li>
         </ul>
     </nav>

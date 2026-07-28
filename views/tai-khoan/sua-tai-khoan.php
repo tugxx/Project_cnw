@@ -40,7 +40,7 @@
                     <select name="role" class="form-control-custom" required>
                         <?php $selectedRole = $_POST['role'] ?? $targetUser['role']; ?>
                         <option value="student" <?= $selectedRole === 'student' ? 'selected' : '' ?>>Sinh viên</option>
-                        <option value="teacher" <?= $selectedRole === 'teacher' ? 'selected' : '' ?>>Giảng viên</option>
+                        <option value="lecturer" <?= $selectedRole === 'lecturer' ? 'selected' : '' ?>>Giảng viên</option>
                     </select>
                 </div>
 

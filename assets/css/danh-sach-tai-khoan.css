@@ -261,3 +261,18 @@
     opacity: 1;
     font-weight: bold;
 }
+
+.action-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    color: #64748b;
+    transition: background-color 0.2s, color 0.2s;
+}
+.action-edit:hover {
+    background-color: #eff6ff;
+    color: #2563eb;
+}

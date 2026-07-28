@@ -4,7 +4,8 @@ function renderBadge($text, $color = 'blue') {
     $styles = [
         'blue'  => 'background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;',
         'green' => 'background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;',
-        'gray'  => 'background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb;'
+        'gray'  => 'background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb;',
+        'red'   => 'background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca;',
     ];
     $style = $styles[$color] ?? $styles['blue'];
 

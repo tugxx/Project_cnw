@@ -38,8 +38,8 @@ if (!$targetUser) {
     showPopUp('Tài khoản người dùng không tồn tại.', 'danh-sach-tai-khoan', 'error');
 }
 
-if ($targetUser['role'] === 'admin' && $targetUser['id'] != $user['id']) {
-    showPopUp('Bạn không có quyền chỉnh sửa tài khoản Admin khác.', 'danh-sach-tai-khoan', 'error');
+if ($targetUser['role'] === 'admin') {
+    showPopUp('Bạn không có quyền chỉnh sửa tài khoản Admin.', 'danh-sach-tai-khoan', 'error');
 }
 
 
@@ -109,13 +109,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $params = [$username, $email, $passwordHash, $role, $fullName, $classValue, $dobValue, $isActive, $targetUserId];
                 } else {
                     $sql = "UPDATE `users` 
-                            SET `username` = ?, `email` = ?, `role` = ?, `full_name` = ?, `class` = ?, `dob` = ?,
+                            SET `username` = ?, `email` = ?, `role` = ?, `full_name` = ?, `class` = ?, `dob` = ?, `is_active` = ?
                             WHERE `id` = ?";
                     $params = [$username, $email, $role, $fullName, $classValue, $dobValue, $isActive, $targetUserId];
                 }
 
                 DB::execute($sql, $params);
-                showPopUp('Cập nhật tài khoản thành công!', 'danh-sach-tai-khoan', 'success');
+                header('Location: /Project_cnw/danh-sach-tai-khoan');
+                exit;
             } catch (PDOException $e) {
                 $errors[] = 'Có lỗi xảy ra trong quá trình cập nhật dữ liệu.';
                 error_log($e->getMessage()); 

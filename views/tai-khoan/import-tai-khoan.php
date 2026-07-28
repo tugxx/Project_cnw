@@ -6,7 +6,7 @@
         <div class="guide-header">
             <h3 class="guide-title">Cấu trúc dữ liệu file mẫu (.xlsx)</h3>
             <a href="assets/templates/mau_import_tai_khoan.xlsx" class="btn-download-sample" download>
-                📥 Tải file Excel mẫu
+                Tải file Excel mẫu
             </a>
         </div>
 

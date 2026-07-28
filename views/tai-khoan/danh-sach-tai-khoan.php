@@ -12,8 +12,11 @@ $totalPages = $totalPages ?? 1;
             <p>Danh sách tài khoản người dùng trong hệ thống</p>
         </div>
         <div class="header-actions">
+            <a href="import-tai-khoan" style="text-decoration: none;">
+                <?php renderButton('Import tài khoản', 'button', 'color: #334155; border: 1px solid #cbd5e1; padding: 0 14px; height: 36px; font-weight: 500; font-size: 13px; border-radius: 6px;', false, '#f1f5f9', '#ffffff') ?>
+            </a>
             <a href="them-tai-khoan" style="text-decoration: none;">
-                <?php renderButton('+ Thêm tài khoản mới', 'button', 'background-color: #2563eb; color: #ffffff; padding: 0 16px; height: 42px; font-weight: 500; border-radius: 6px;') ?>
+                <?php renderButton('Thêm tài khoản', 'button', 'background-color: #2563eb; color: #ffffff; padding: 0 14px; height: 36px; font-weight: 500; font-size: 13px; border-radius: 6px;') ?>
             </a>
         </div>
     </header>
@@ -21,7 +24,15 @@ $totalPages = $totalPages ?? 1;
     <section class="filter-bar">
         <form method="GET" action="" class="filter-form">
             <div class="filter-group">
-                <?php renderInput('search', 'Tìm kiếm', 'text', $_GET['search'] ?? '', $errors['search'] ?? '', 'Nhập tên, username hoặc email...') ?>
+                <?php renderInput(
+                    name: 'search', 
+                    label: 'Tìm kiếm', 
+                    type: 'text', 
+                    value: $_GET['search'] ?? '', 
+                    error: $errors['search'] ?? '', 
+                    placeholder: 'Nhập tên, username hoặc email...',
+                    wrapperStyle: 'margin-bottom: 0;'
+                ) ?>
             </div>
 
             <div class="filter-group filter-select-wrapper">
@@ -75,7 +86,7 @@ $totalPages = $totalPages ?? 1;
                         <?php $sortEmail = getSortUrl('email'); ?>
                         <th>
                             <a href="<?= $sortEmail['url'] ?>" class="sort-link <?= $sortEmail['active'] ? 'active' : '' ?>">
-                                <span>Tên đăng nhập</span>
+                                <span>Email</span>
                                 <?= renderSortIcon($sortEmail['direction']) ?>
                             </a>
                         </th>
@@ -119,6 +130,8 @@ $totalPages = $totalPages ?? 1;
                                 <?= renderSortIcon($sortCreated['direction']) ?>
                             </a>
                         </th>
+
+                        <th style="width: 80px; text-align: center;">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -136,11 +149,11 @@ $totalPages = $totalPages ?? 1;
                                 <td>
                                     <?php 
                                     if ($item['role'] === 'admin') {
-                                        renderBadge('Admin', 'red');
+                                        renderBadge('Admin', 'blue');
                                     } elseif ($item['role'] === 'lecturer') {
                                         renderBadge('Giảng viên', 'purple');
                                     } else {
-                                        renderBadge('Sinh viên', 'blue');
+                                        renderBadge('Sinh viên', 'gray');
                                     }
                                     ?>
                                 </td>
@@ -151,16 +164,26 @@ $totalPages = $totalPages ?? 1;
                                     if ($item['is_active']) {
                                         renderBadge('Hoạt động', 'green');
                                     } else {
-                                        renderBadge('Đã khóa', 'gray');
+                                        renderBadge('Khóa', 'red');
                                     }
                                     ?>
                                 </td>
                                 <td><?= date('d/m/Y H:i', strtotime($item['created_at'])) ?></td>
+                                <td style="text-align: center;">
+                                    <?php if ($item['role'] !== 'admin'): ?>
+                                    <a href="sua-tai-khoan?id=<?= $item['id'] ?>" class="action-icon action-edit" title="Sửa tài khoản">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                                            <path d="m15 5 4 4"/>
+                                        </svg>
+                                    </a>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="9" class="empty-state">
+                            <td colspan="10" class="empty-state">
                                 Không tìm thấy tài khoản nào trong hệ thống.
                             </td>
                         </tr>
