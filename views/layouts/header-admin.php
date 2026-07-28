@@ -28,7 +28,7 @@
                     </button>
 
                     <ul class="user-menu__dropdown">
-                        <li><a href="/Project_cnw/xem-ho-so-ca-nhan">Hồ sơ cá nhân</a></li>
+                        <li><a href="/Project_cnw/ho-so-ca-nhan">Hồ sơ cá nhân</a></li>
                         <li class="divider"></li>
                         <li>
                             <a href="/Project_cnw/dang-xuat" 

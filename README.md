@@ -27,7 +27,6 @@ Project_cnw/
 ├── assets/                     # Tài nguyên tĩnh công khai (Public Assets)
 │   ├── css/                    # Stylesheet
 │   ├── js/                     # JavaScript
-│   └── uploads/                # File/Ảnh do người dùng tải lên
 │
 ├── src/                        # Xử lý Logic Backend
 │   ├── DB.php                  # Lớp kết nối CSDL PDO (Singleton & Helper Functions)
