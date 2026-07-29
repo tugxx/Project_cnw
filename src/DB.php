@@ -41,6 +41,15 @@ class DB {
         return $stmt->execute($params);
     }
 
+    public static function insert($sql, $params = []) {
+        $stmt = self::$pdo->prepare($sql);
+        $success = $stmt->execute($params);
+        if ($success) {
+            return self::$pdo->lastInsertId(); 
+        }
+        return false;
+    }
+
     public static function beginTransaction() {
         return self::$pdo->beginTransaction();
     }
