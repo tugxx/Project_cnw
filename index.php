@@ -1,4 +1,5 @@
 <?php
+
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../storage/logs/app.log');
 session_start();
@@ -8,12 +9,14 @@ define('ALLOW_ACCESS', true);
 $config = require_once __DIR__ . '/config/app_config.php';
 require_once __DIR__ . '/src/DB.php';
 require_once __DIR__ . '/src/helpers/tai-khoan-helper.php'; 
+require_once __DIR__ . '/src/helpers/hoc-phan-helper.php';
 require_once __DIR__ . '/views/components/pop-up.php';
 require_once __DIR__ . '/views/components/input.php';
 require_once __DIR__ . '/views/components/alert.php';
 require_once __DIR__ . '/views/components/button.php';
 require_once __DIR__ . '/views/components/card.php';
 require_once __DIR__ . '/views/components/badge.php';
+require_once __DIR__.'/views/components/course-card.php';
 
 DB::getConnection($config);
 
@@ -26,6 +29,12 @@ $routes = [
     'quen-mat-khau'     => __DIR__ . '/src/Controllers/tai-khoan/quen-mat-khau.php',
     'dat-lai-mat-khau'  => __DIR__ . '/src/Controllers/tai-khoan/dat-lai-mat-khau.php',
     'ho-so-ca-nhan'     => __DIR__ . '/src/Controllers/tai-khoan/ho-so-ca-nhan.php',
+    // them moi
+    'tao-hoc-phan' => __DIR__.'/src/Controllers/hoc-phan/tao-hoc-phan.php',
+    'danh-sach-hoc-phan' =>__DIR__.'/src/Controllers/hoc-phan/danh-sach-hoc-phan.php',
+    
+    
+    //sadfgfhg
 ];
 
 if (array_key_exists($page, $routes) && file_exists($routes[$page])) {
