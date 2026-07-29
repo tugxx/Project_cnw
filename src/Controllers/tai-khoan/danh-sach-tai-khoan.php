@@ -35,8 +35,7 @@ $pageNum = (int)($_GET['page_num'] ?? 1);
 $pageNum = max(1, $pageNum);               
  
 $limit = 10;
-
-$allowedSortColumns = ['full_name', 'username', 'email', 'created_at', 'role'];
+$allowedSortColumns = ['full_name', 'username', 'email', 'created_at', 'role', 'user_code', 'class', 'dob'];
 $allowedSortOrders  = ['asc', 'desc'];
 
 $orderBySql = '';
@@ -47,15 +46,30 @@ if (in_array($sortBy, $allowedSortColumns)) {
     $orderBySql = "ORDER BY {$sortBy} " . strtoupper($sortOrder);
 }
 
+$searchableFields = [
+    'user_code' => 'Mã',
+    'full_name' => 'Họ và tên',
+    'email'     => 'Email',
+    'username'  => 'Tên đăng nhập',
+    'class'     => 'Lớp',
+];
+$allowedSearchFields = array_keys($searchableFields);
+$searchIn = $_GET['search_in'] ?? ['user_code', 'full_name', 'email'];
+$searchIn = array_intersect($searchIn, $allowedSearchFields);
+
 $whereConditions = ["1=1"];
 $params = [];
-if ($search !== '') {
+
+if ($search !== '' && !empty($searchIn)) {
     $searchTerm = "%{$search}%";
-    $whereConditions[] = "(full_name LIKE ? OR username LIKE ? OR email LIKE ?)";
-    $params[] = $searchTerm;
-    $params[] = $searchTerm;
-    $params[] = $searchTerm;
+    $searchConditions = [];
+    foreach ($searchIn as $field) {
+        $searchConditions[] = "$field LIKE ?";
+        $params[] = $searchTerm;
+    }
+    $whereConditions[] = '(' . implode(' OR ', $searchConditions) . ')';
 }
+
 if ($role !== '') {
     $whereConditions[] = "role = ?";
     $params[] = $role;
@@ -81,7 +95,7 @@ if ($pageNum > $totalPages) {
 $offset = ($pageNum - 1) * $limit;
 
 $sqlListUsers = "
-    SELECT `id`, `username`, `email`, `role`, `full_name`, `class`, `dob`, `is_active`, `created_at`
+    SELECT `id`, `username`, `email`, `role`, `full_name`, `class`, `dob`, `is_active`, `created_at`, user_code
     FROM `users`
     WHERE {$whereSql}
     {$orderBySql}

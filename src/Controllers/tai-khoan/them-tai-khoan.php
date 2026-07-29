@@ -28,16 +28,22 @@ if ($user['role'] !== 'admin') {
 
 
 $errors = [];
-$successMessage = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email     = trim($_POST['email'] ?? '');
-    $username  = trim($_POST['username'] ?? '');
-    $password  = trim($_POST['password'] ?? '');
-    $fullName  = trim($_POST['full_name'] ?? '');
-    $dob       = $_POST['dob'] ?? null;
-    $class     = trim($_POST['class'] ?? '');
-    $role      = $_POST['role'] ?? 'student';
+    $code = trim($_POST['user_code'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+    $fullName = trim($_POST['full_name'] ?? '');
+    $dob = $_POST['dob'] ?? null;
+    $class = trim($_POST['class'] ?? '');
+    $role = $_POST['role'] ?? 'student';
+
+    if (empty($code)) {
+        $errors[] = 'Chưa nhập mã.';
+    } elseif (!ctype_digit($code)) {
+        $errors[] = 'Mã không hợp lệ';
+    }
 
     if (empty($email)) {
         $errors[] = 'Email không được để trống.';
@@ -57,44 +63,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Họ và tên không được để trống.';
     }
 
-    if (empty($errors)) {        
-        $existingEmail = DB::fetchOne("SELECT id FROM users WHERE email = ?", [$email]);
+    if (empty($errors)) {
+        $sql = "SELECT `id` 
+                FROM `users` 
+                WHERE `user_code` = ?";
+        $existingCode = DB::fetchOne($sql, [$code]);
+        if ($existingCode) {
+            $errors[] = 'Mã đã tồn tại trên hệ thống.';
+        }
+
+        $sql = "SELECT `id` 
+                FROM `users` 
+                WHERE `email` = ?";
+        $existingEmail = DB::fetchOne($sql, [$email]);
         if ($existingEmail) {
             $errors[] = 'Email đã tồn tại trên hệ thống.';
         }
 
-        $existingUsername = DB::fetchOne("SELECT id FROM users WHERE username = ?", [$username]);
+        $sql = "SELECT `id` 
+                FROM `users` 
+                WHERE `username` = ?";
+        $existingUsername = DB::fetchOne($sql, [$username]);
         if ($existingUsername) {
             $errors[] = 'Tên đăng nhập đã tồn tại trên hệ thống.';
         }
 
-        if ($role=="admin") {
-            $errors[] = 'Không được tạo được admin.';
+        $allowedRoles = ['student', 'lecturer'];
+        if (!in_array($role, $allowedRoles, true)) {
+            $errors[] = 'Vai trò không hợp lệ.';
         }
 
         if (empty($errors)) {
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $isActive = 1;
-            $createdAt = date('Y-m-d H:i:s');
-            $sql = "INSERT INTO `users` (`username`, `email`, `password`, `role`, `full_name`, `class`, `dob`, `is_active`) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $params = [
-                $username,
-                $email,
-                $hashedPassword,
-                $role,
-                $fullName,
-                !empty($class) ? $class : null,
-                !empty($dob) ? $dob : null,
-                $isActive
-            ];
-            $result = DB::execute($sql, $params);
-
-            if ($result) {
-                $successMessage = 'Thêm tài khoản thành công!';
-            } else {
+            try {
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                $isActive = 1;
+                $createdAt = date('Y-m-d H:i:s');
+                $sql = "INSERT INTO `users` (`user_code` , `username`, `email`, `password`, `role`, `full_name`, `class`, `dob`, `is_active`) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $params = [
+                    $code,
+                    $username,
+                    $email,
+                    $hashedPassword,
+                    $role,
+                    $fullName,
+                    !empty($class) ? $class : null,
+                    !empty($dob) ? $dob : null,
+                    $isActive
+                ];
+                $result = DB::execute($sql, $params);
+                header('Location: /Project_cnw/danh-sach-tai-khoan');
+                exit;
+            } catch (Exception $e) {
                 $errors[] = 'Đã xảy ra lỗi trong quá trình lưu dữ liệu. Vui lòng thử lại.';
-            }
+                error_log($e->getMessage()); 
+            }     
         }
     }
 }

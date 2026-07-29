@@ -12,6 +12,10 @@
             <input type="hidden" name="id" value="<?= htmlspecialchars($targetUser['id']) ?>">
             <div class="form-grid-2">
                 <div>
+                    <?php renderInput('user_code', 'Mã', 'text', $_POST['user_code'] ?? $targetUser['user_code'] ?? "", '', 'Nhập mã người dùng', true); ?>
+                </div>
+
+                <div>
                     <?php renderInput('username', 'Tên đăng nhập', 'text', $_POST['username'] ?? $targetUser['username'], '', 'Nhập tên đăng nhập', true); ?>
                 </div>
 

@@ -23,7 +23,7 @@
             <div class="site-header__right">
                 <div class="user-menu">
                     <button class="user-menu__trigger">
-                        <span><?= htmlspecialchars($_SESSION['user']['full_name'] ?? '') ?></span>
+                        <span><?= htmlspecialchars(($_SESSION['user']['user_code'] ?? '') . ' ' . ($_SESSION['user']['full_name'] ?? '')) ?></span>
                         <small>▾</small>
                     </button>
 
@@ -53,6 +53,7 @@
         <ul class="sidebar-nav__list">
             <li><a href="/Project_cnw">Trang chủ</a></li>
             <li><a href="/Project_cnw/danh-sach-tai-khoan">Tài khoản</a></li>
+            <li><a href="/Project_cnw/tao-lop-hoc-phan?courseId=1">tao-lop-hoc-phan</a></li>
         </ul>
     </nav>
 

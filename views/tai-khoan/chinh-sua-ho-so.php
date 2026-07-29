@@ -29,7 +29,7 @@ $dobVal = $_POST['dob'] ?? $user['dob'] ?? '';
                 </div>
 
                 <div class="user-title-group">
-                    <h2><?= htmlspecialchars($user['full_name'] ?? 'Chỉnh sửa hồ sơ') ?></h2>
+                    <h2><?= htmlspecialchars(($_SESSION['user']['user_code'] ?? '') . ' ' . ($user['full_name'] ?? '')) ?></h2>
                     <div class="user-badge">
                         <?php if (function_exists('renderBadge')) renderBadge($roleName, 'blue'); ?>
                     </div>

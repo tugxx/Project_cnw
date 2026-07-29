@@ -45,6 +45,7 @@ if ($targetUser['role'] === 'admin') {
 
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $code = trim($_POST['user_code'] ?? '');
     $username = trim($_POST['username'] ?? '');
     $email    = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
@@ -54,32 +55,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $role     = $_POST['role'] ?? '';
     $isActive = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 1;
 
+    if (empty($code)) {
+        $errors[] = 'Chưa nhập mã.';
+    } elseif (!ctype_digit($code)) {
+        $errors[] = 'Mã không hợp lệ';
+    }
+
     if (empty($email)) {
-        $errors['email'] = 'Email không được để trống.';
+        $errors[] = 'Email không được để trống.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Email không đúng định dạng.';
+        $errors[] = 'Email không đúng định dạng.';
     }
 
     if (empty($username)) {
-        $errors['username'] = 'Tên đăng nhập không được để trống.';
+        $errors[] = 'Tên đăng nhập không được để trống.';
     }
 
     if (empty($fullName)) {
-        $errors['full_name'] = 'Họ và tên không được để trống.';
+        $errors[] = 'Họ và tên không được để trống.';
     }
 
     if ($role === 'admin') {
-        $errors['role'] = 'Vai trò sửa không được là admin.';
+        $errors[] = 'Vai trò sửa không hợp lệ.';
     }
 
     if (!empty($dob)) {
         $currentDate = date('Y-m-d');
         if ($dob > $currentDate) {
-            $errors['dob'] = 'Ngày sinh không được sau thời điểm hiện tại.';
+            $errors[] = 'Ngày sinh không được sau thời điểm hiện tại.';
         }
     }
 
     if (empty($errors)) {
+        $sql = "SELECT `id` 
+                FROM `users` 
+                WHERE `user_code` = ? AND id != ?";
+        $existingCode = DB::fetchOne($sql, [$code, $targetUserId]);
+        if ($existingCode) {
+            $errors[] = 'Mã đã tồn tại trên hệ thống.';
+        }
+        
         $sql = "SELECT id 
                 FROM users 
                 WHERE email = ? AND id != ?";
@@ -98,20 +113,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($errors)) {
             try {
+                $codeValue = !empty($code) ? $code : null;
                 $dobValue = !empty($dob) ? $dob : null;
                 $classValue = !empty($class) ? $class : null;
 
                 if (!empty($password)) {
                     $passwordHash = password_hash($password, PASSWORD_BCRYPT);
                     $sql = "UPDATE `users` 
-                            SET `username` = ?, `email` = ?, `password` = ?, `role` = ?, `full_name` = ?, `class` = ?, `dob` = ?, `is_active` = ? 
+                            SET `user_code` = ?, `username` = ?, `email` = ?, `password` = ?, `role` = ?, `full_name` = ?, `class` = ?, `dob` = ?, `is_active` = ? 
                             WHERE `id` = ?";
-                    $params = [$username, $email, $passwordHash, $role, $fullName, $classValue, $dobValue, $isActive, $targetUserId];
+                    $params = [$codeValue, $username, $email, $passwordHash, $role, $fullName, $classValue, $dobValue, $isActive, $targetUserId];
                 } else {
                     $sql = "UPDATE `users` 
-                            SET `username` = ?, `email` = ?, `role` = ?, `full_name` = ?, `class` = ?, `dob` = ?, `is_active` = ?
+                            SET `user_code` = ?, `username` = ?, `email` = ?, `role` = ?, `full_name` = ?, `class` = ?, `dob` = ?, `is_active` = ?
                             WHERE `id` = ?";
-                    $params = [$username, $email, $role, $fullName, $classValue, $dobValue, $isActive, $targetUserId];
+                    $params = [$codeValue, $username, $email, $role, $fullName, $classValue, $dobValue, $isActive, $targetUserId];
                 }
 
                 DB::execute($sql, $params);

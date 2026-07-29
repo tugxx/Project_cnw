@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $today = date('Y-m-d');
                     $lineNumber = 0;
 
-                    foreach ($xlsx->rows() as $rowIndex => $rawRow) {
+                    foreach ($xlsx->rows() as $rowIndex => $row) {
                         /** @var array $row */
                         if ($rowIndex === 0 || empty(array_filter($row))) {
                             continue;
@@ -56,13 +56,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         $lineNumber = $rowIndex + 1;
 
-                        $email    = trim($row[0] ?? '');
-                        $username = trim($row[1] ?? '');
-                        $password = trim($row[2] ?? '');
-                        $fullName = trim($row[3] ?? '');
-                        $dob      = !empty($row[4]) ? trim($row[4]) : null; 
-                        $class    = trim($row[5] ?? '');
-                        $role     = !empty($row[6]) ? strtolower(trim($row[6])) : 'student';
+                        $code = trim($row[0] ?? '');
+                        $email = trim($row[1] ?? '');
+                        $username = $code;
+                        $fullName = trim($row[2] ?? '');
+                        $dob = !empty($row[3]) ? trim($row[3]) : null; 
+                        $class = trim($row[4] ?? '');
+                        $role = !empty($row[5]) ? strtolower(trim($row[5])) : 'student';
+
+                        if (empty($code)) {
+                            throw new Exception("Dòng {$lineNumber}: Mã không được để trống.");
+                        } elseif (!ctype_digit($code)) {
+                            throw new Exception("Dòng {$lineNumber}: Mã '{$code}' không hợp lệ (Chỉ được là số).");
+                        }
 
                         if (empty($email)) {
                             throw new Exception("Dòng {$lineNumber}: Email không được để trống.");
@@ -70,29 +76,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             throw new Exception("Dòng {$lineNumber}: Email '{$email}' không hợp lệ.");
                         }
 
-                        if (empty($username)) {
-                            throw new Exception("Dòng {$lineNumber}: Tên đăng nhập không được để trống.");
-                        }
-
-                        if (empty($password)) {
-                            throw new Exception("Dòng {$lineNumber}: Mật khẩu không được để trống.");
-                        }
-
                         if (empty($fullName)) {
                             throw new Exception("Dòng {$lineNumber}: Họ và tên không được để trống.");
                         }
 
-                        if ($role === 'admin') {
-                            throw new Exception("Dòng {$lineNumber}: Không được nhập tài khoản với vai trò Admin.");
+                        $allowedRoles = ['student', 'teacher'];
+                        if (!in_array($role, $allowedRoles, true)) {
+                            throw new Exception("Dòng {$lineNumber}: Vai trò '{$role}' không hợp lệ.");
                         }
 
                         if (!empty($dob) && strtotime($dob) > strtotime($today)) {
                             throw new Exception("Dòng {$lineNumber}: Ngày sinh '{$dob}' không được sau ngày hiện tại.");
                         }
 
-                        $sql = "SELECT id 
-                                FROM users 
-                                WHERE email = ?";
+                        $sql = "SELECT `id` 
+                                FROM `users` 
+                                WHERE `user_code` = ?";
+                        $existingCode = DB::fetchOne($sql, [$code]);
+                        if ($existingCode) {
+                            throw new Exception("Dòng {$lineNumber}: Mã '{$code}' đã tồn tại trên hệ thống.");
+                        }
+
+                        $sql = "SELECT `id` 
+                                FROM `users` 
+                                WHERE `email` = ?";
                         $existingEmail = DB::fetchOne($sql, [$email]);
                         if ($existingEmail) {
                             throw new Exception("Dòng {$lineNumber}: Email '{$email}' đã tồn tại trên hệ thống.");
@@ -106,11 +113,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             throw new Exception("Dòng {$lineNumber}: Tên đăng nhập '{$username}' đã tồn tại trên hệ thống.");
                         }
 
-                        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                        $hashedPassword = password_hash("1", PASSWORD_DEFAULT);
                         $isActive = 1;
-                        $sqlInsert = "INSERT INTO `users` (`username`, `email`, `password`, `role`, `full_name`, `class`, `dob`, `is_active`) 
-                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                        $sqlInsert = "INSERT INTO `users` (`user_code`, `username`, `email`, `password`, `role`, `full_name`, `class`, `dob`, `is_active`) 
+                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         $params = [
+                            $code,
                             $username,
                             $email,
                             $hashedPassword,
@@ -132,11 +140,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
 
                     DB::commit();
-                    showPopUp("Import thành công {$insertedCount} tài khoản!", 'danh-sach-tai-khoan', 'success');
                 } catch (Exception $e) {
                     DB::rollBack();
                     $errors[] = $e->getMessage();
                 }
+
+                showPopUp("Import thành công {$insertedCount} tài khoản!", 'danh-sach-tai-khoan', 'success');
             } else {
                 $errors[] = 'Không thể đọc file Excel. Vui lòng kiểm tra lại cấu trúc file: ' . SimpleXLSX::parseError();
             }

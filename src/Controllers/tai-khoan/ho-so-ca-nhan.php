@@ -10,7 +10,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 $userId = $_SESSION['user']['id'];
-$sql = "SELECT `id`, `email`, `full_name`, `dob`, `class`, `role`, `avatar`, `is_active` 
+$sql = "SELECT `id`, `email`, `full_name`, `dob`, `class`, `role`, `avatar`, `is_active`, `user_code`
         FROM users 
         WHERE id = ?";
 $user = DB::fetchOne($sql, [$userId]);

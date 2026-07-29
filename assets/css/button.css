@@ -1,0 +1,46 @@
+.btn-custom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    
+    background-color: var(--btn-bg, #2563eb);
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    
+    padding: 9px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-sizing: border-box;
+}
+
+.btn-custom:hover {
+    background-color: var(--btn-hover-bg, #1d4ed8);
+}
+
+.btn-custom:active {
+    transform: translateY(1px);
+}
+
+.btn-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    line-height: 1;
+    text-align: center;
+    width: 100%;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.btn-auto {
+    width: auto;
+    white-space: nowrap;
+}

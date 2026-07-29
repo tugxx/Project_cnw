@@ -49,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'role' => $user['role'],
                     'full_name' => $user['full_name'],
                     'class' => $user['class'],
+                    'code' => $user['user_code'],
                 ];
                 header('Location: /Project_cnw');
                 exit;

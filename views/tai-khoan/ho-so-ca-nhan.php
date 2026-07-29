@@ -20,7 +20,7 @@ $roleName = $user['role'] ?? 'Sinh viên';
         <div class="profile-header-main">
             <div class="profile-user-detail">
                 <h1 class="profile-name">
-                    <?= htmlspecialchars($user['full_name'] ?? 'Người dùng') ?>
+                    <?= htmlspecialchars(($user['user_code'] ?? '') . ' ' . ($user['full_name'] ?? '')) ?>
                 </h1>
                 <div class="profile-badge">
                     <?php if (function_exists('renderBadge')) renderBadge($roleName, 'blue'); ?>
