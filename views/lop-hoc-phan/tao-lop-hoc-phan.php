@@ -4,6 +4,7 @@ $page = $page ?? 1;
 $checkedStudentIds = $checkedStudentIds ?? [];
 $keyword = $keyword ?? "";
 $studentsList = $studentsList ?? [];
+$courseId = $courseId ?? "";
 ?>
 
 
@@ -54,9 +55,6 @@ $studentsList = $studentsList ?? [];
                             placeholder="VD: Lập trình web - Nhóm 1"
                             required
                         >
-                        <?php if (isset($fieldErrors['section_name'])): ?>
-                            <span class="field-error"><?= htmlspecialchars($fieldErrors['section_name']) ?></span>
-                        <?php endif; ?>
                     </div>
 
                     <div class="form-group">
@@ -79,9 +77,6 @@ $studentsList = $studentsList ?? [];
                             class="form-control" 
                             accept=".jpg,.jpeg,.png,.webp"
                         >
-                        <?php if (isset($fieldErrors['image_cover'])): ?>
-                            <span class="field-error"><?= htmlspecialchars($fieldErrors['image_cover']) ?></span>
-                        <?php endif; ?>
                     </div>
 
                     <div class="selected-count-badge">

@@ -3,9 +3,10 @@ $sections = $sections ?? [];
 $coverImage = !empty($section['cover_image']) ? $section['cover_image'] : '/Project_cnw/assets/media/default-image-section.jpg';
 $defaultCover = '/Project_cnw/assets/media/default-image-section.jpg';
 $studentCount = (int)($section['total_students'] ?? 0);
+$courseId = $courseId ?? "";
 ?>
-<link rel="stylesheet" href="/Project_cnw/assets/css/danh-sach-lop-hoc-phan-giang-vien.css">
 
+<link rel="stylesheet" href="/Project_cnw/assets/css/danh-sach-lop-hoc-phan-giang-vien.css">
 <div class="lms-container">
     <div class="lms-page-header">
         <div class="lms-header-title">

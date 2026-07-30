@@ -1,6 +1,6 @@
 <?php
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../storage/logs/app.log');
+ini_set('error_log', __DIR__ . '/storage/logs/app.log');
 session_start();
 
 define('ALLOW_ACCESS', true);

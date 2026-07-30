@@ -251,15 +251,15 @@ if (isset($_POST["create_section"])) {
         }
     }
 
-    if (isset($_FILES['image_cover']) && $_FILES['image_cover']['error'] === UPLOAD_ERR_OK) {
-        $file = $_FILES['image_cover'];
+    if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['cover_image'];
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
         $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
         if (!in_array($fileExtension, $allowedExtensions)) {
-            $fieldErrors['image_cover'] = 'Chỉ chấp nhận các định dạng ảnh: JPG, JPEG, PNG, WEBP.';
+            $errors[] = 'Chỉ chấp nhận các định dạng ảnh: JPG, JPEG, PNG, WEBP.';
         } elseif ($file['size'] > 2 * 1024 * 1024) {
-            $fieldErrors['image_cover'] = 'Dung lượng ảnh tối đa là 2MB.';
+            $errors[] = 'Dung lượng ảnh tối đa là 2MB.';
         } else {
             $fileName = 'section_' . $sectionCode . '_' . time() . '.' . $fileExtension;
             $uploadDir = __DIR__ . '/../../../storage/uploads/sections/';
@@ -271,14 +271,14 @@ if (isset($_POST["create_section"])) {
                 $errors[] = 'Lỗi trong quá trình lưu tệp ảnh.';
             }
         }
-    } elseif (isset($_FILES['image_cover']) && $_FILES['image_cover']['error'] !== UPLOAD_ERR_NO_FILE) {
+    } elseif (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] !== UPLOAD_ERR_NO_FILE) {
         $errors[] = 'Lỗi khi tải ảnh lên.';
     }
 
     if (empty($errors)) {
         try {
             DB::beginTransaction();
-            $sql = "INSERT INTO `sections` (`section_code`, `section_name`, `description`, `course_id`, `image_cover`) 
+            $sql = "INSERT INTO `sections` (`section_code`, `section_name`, `description`, `course_id`, `cover_image`) 
                     VALUES (?, ?, ?, ?, ?)";
             $sectionId = DB::insert($sql, [$sectionCode, $sectionName, !empty($description) ? $description : null, $courseId, $imageCoverPath]);
             if (!$sectionId) {
