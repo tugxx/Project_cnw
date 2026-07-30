@@ -148,7 +148,8 @@ if (isset($_POST["create_section"])) {
     $sectionCode = trim($_POST['section_code'] ?? ''); 
     $sectionName = trim($_POST['section_name'] ?? ''); 
     $description = trim($_POST['description'] ?? ''); 
-    $studentIds  = $checkedStudentIds;         
+    $studentIds  = $checkedStudentIds;
+    $imageCoverPath = null;
 
     if (empty($sectionCode)) {
         $errors[] = 'Mã lớp học phần không được để trống.';
@@ -250,12 +251,36 @@ if (isset($_POST["create_section"])) {
         }
     }
 
+    if (isset($_FILES['image_cover']) && $_FILES['image_cover']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['image_cover'];
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+        $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+        if (!in_array($fileExtension, $allowedExtensions)) {
+            $fieldErrors['image_cover'] = 'Chỉ chấp nhận các định dạng ảnh: JPG, JPEG, PNG, WEBP.';
+        } elseif ($file['size'] > 2 * 1024 * 1024) {
+            $fieldErrors['image_cover'] = 'Dung lượng ảnh tối đa là 2MB.';
+        } else {
+            $fileName = 'section_' . $sectionCode . '_' . time() . '.' . $fileExtension;
+            $uploadDir = __DIR__ . '/../../../storage/uploads/sections/';
+
+            $targetPath = $uploadDir . $fileName;
+            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                $imageCoverPath = $fileName;
+            } else {
+                $errors[] = 'Lỗi trong quá trình lưu tệp ảnh.';
+            }
+        }
+    } elseif (isset($_FILES['image_cover']) && $_FILES['image_cover']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $errors[] = 'Lỗi khi tải ảnh lên.';
+    }
+
     if (empty($errors)) {
         try {
             DB::beginTransaction();
-            $sql = "INSERT INTO `sections` (`section_code`, `section_name`, `description`, `course_id`) 
-                    VALUES (?, ?, ?, ?)";
-            $sectionId = DB::insert($sql, [$sectionCode, $sectionName, !empty($description) ? $description : null, $courseId]);
+            $sql = "INSERT INTO `sections` (`section_code`, `section_name`, `description`, `course_id`, `image_cover`) 
+                    VALUES (?, ?, ?, ?, ?)";
+            $sectionId = DB::insert($sql, [$sectionCode, $sectionName, !empty($description) ? $description : null, $courseId, $imageCoverPath]);
             if (!$sectionId) {
                 throw new Exception('Không thể tạo lớp học phần. Vui lòng thử lại.');
             }

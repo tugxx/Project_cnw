@@ -1,5 +1,4 @@
 <?php
-
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../storage/logs/app.log');
 session_start();
@@ -41,6 +40,7 @@ $routes = [
 
     // lop-hoc-phan
     'tao-lop-hoc-phan'   => __DIR__ . '/src/Controllers/lop-hoc-phan/tao-lop-hoc-phan.php',
+    'danh-sach-lop-hoc-phan' => __DIR__ . '/src/Controllers/lop-hoc-phan/danh-sach-lop-hoc-phan.php',
 
     // them moi
     'tao-hoc-phan' => __DIR__.'/src/Controllers/hoc-phan/tao-hoc-phan.php',

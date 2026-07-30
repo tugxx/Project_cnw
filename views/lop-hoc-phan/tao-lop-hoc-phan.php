@@ -11,7 +11,6 @@ $studentsList = $studentsList ?? [];
 
 <div class="create-section-container">
     <h1 class="page-title">Tạo Lớp Học Phần Mới</h1>
-
     <?php if (!empty($errors)): ?>
         <div class="global-error-box">
             <strong>Đã xảy ra lỗi:</strong>
@@ -28,7 +27,7 @@ $studentsList = $studentsList ?? [];
             <div class="content-box">
                 <h2 class="box-title">Thông tin lớp học phần</h2>
                 
-                <form id="form-create-section" action="" method="POST">
+                <form id="form-create-section" action="" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="courseId" value="<?= htmlspecialchars($courseId) ?>">
                     
                     <div class="form-group">
@@ -69,6 +68,20 @@ $studentsList = $studentsList ?? [];
                             rows="3" 
                             placeholder="Ghi chú hoặc thông tin bổ sung..."
                         ><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image_cover">Ảnh bìa lớp học phần</label>
+                        <input 
+                            type="file" 
+                            id="image_cover" 
+                            name="image_cover" 
+                            class="form-control" 
+                            accept=".jpg,.jpeg,.png,.webp"
+                        >
+                        <?php if (isset($fieldErrors['image_cover'])): ?>
+                            <span class="field-error"><?= htmlspecialchars($fieldErrors['image_cover']) ?></span>
+                        <?php endif; ?>
                     </div>
 
                     <div class="selected-count-badge">
