@@ -38,13 +38,20 @@ $routes = [
     'import-tai-khoan'      => __DIR__ . '/src/Controllers/tai-khoan/import-tai-khoan.php',
     'danh-sach-tai-khoan'   => __DIR__ . '/src/Controllers/tai-khoan/danh-sach-tai-khoan.php',
 
+    // them moi
+    'tao-hoc-phan' => __DIR__.'/src/Controllers/hoc-phan/tao-hoc-phan.php',
+    'danh-sach-hoc-phan' =>__DIR__.'/src/Controllers/hoc-phan/danh-sach-hoc-phan.php',
+
     // lop-hoc-phan
     'tao-lop-hoc-phan'   => __DIR__ . '/src/Controllers/lop-hoc-phan/tao-lop-hoc-phan.php',
     'danh-sach-lop-hoc-phan' => __DIR__ . '/src/Controllers/lop-hoc-phan/danh-sach-lop-hoc-phan.php',
 
-    // them moi
-    'tao-hoc-phan' => __DIR__.'/src/Controllers/hoc-phan/tao-hoc-phan.php',
-    'danh-sach-hoc-phan' =>__DIR__.'/src/Controllers/hoc-phan/danh-sach-hoc-phan.php',
+
+
+
+    // nhom
+    'tao-nhom'   => __DIR__ . '/src/Controllers/nhom/tao-nhom.php',
+    'danh-sach-nhom'   => __DIR__ . '/src/Controllers/nhom/danh-sach-nhom.php',
 
     //
     'trang-chu'         => __DIR__ . '/src/Controllers/trang-chu.php',

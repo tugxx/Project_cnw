@@ -11,8 +11,8 @@ if (!isset($_SESSION['user']['id'])) {
 
 $userId = $_SESSION['user']['id'];
 $sql = "SELECT `id`, `full_name`, `dob`, `avatar`, `is_active`, `email`, `role`
-        FROM users 
-        WHERE id = ?";
+        FROM `users` 
+        WHERE `id` = ?";
 $user = DB::fetchOne($sql, [$userId]);
 if (!$user || !$user["is_active"]) {
     destroyUserSession();
@@ -31,8 +31,8 @@ if (!$targetUserId) {
 }
 
 $sql = "SELECT * 
-        FROM users 
-        WHERE id = ?";
+        FROM `users` 
+        WHERE `id` = ?";
 $targetUser = DB::fetchOne($sql, [$targetUserId]);
 if (!$targetUser) {
     showPopUp('Tài khoản người dùng không tồn tại.', 'danh-sach-tai-khoan', 'error');

@@ -12,37 +12,38 @@ if (!isset($_SESSION['user'])) {
 }
 
 $userId = $_SESSION['user']['id'];
-$courseId = (int)($_GET['courseId'] ?? $_POST['courseId'] ?? 0);
-$sql = "SELECT 
-            u.id AS user_id, u.is_active, u.role,
-            c.id AS course_id,
-            cl.id AS is_assigned
-        FROM `users` u
-        LEFT JOIN `courses` c 
-            ON c.id = ?
-        LEFT JOIN `courses_lecturers` cl 
-            ON cl.course_id = c.id AND cl.lecturer_id = u.id
-        WHERE u.id = ?";
-$checkData = DB::fetchOne($sql, [$courseId, $userId]);
+$sql = "SELECT `id`, `is_active`, `role` 
+        FROM `users` 
+        WHERE `id` = ?";
+$user = DB::fetchOne($sql, [$userId]);
 
-if (!$checkData || !$checkData['is_active']) {
+if (!$user || !$user['is_active']) {
     destroyUserSession();
     showPopUp('Tài khoản của bạn không tồn tại hoặc đã bị khoá.', 'dang-nhap', 'error');
     exit;
 }
 
-if ($checkData['role'] !== 'lecturer') {
+if ($user['role'] !== 'lecturer') {
     destroyUserSession();
     showPopUp('Tài khoản của bạn không có quyền thực hiện chức năng này.', 'dang-nhap', 'error');
     exit;
 }
 
-if (!$checkData['course_id']) {
+$courseId = (int)($_GET['courseId'] ?? $_POST['courseId'] ?? 0);
+$sql = "SELECT `id` 
+        FROM `courses` 
+        WHERE `id` = ?";
+$course = DB::fetchOne($sql, [$courseId]);
+if (!$course) {
     showPopUp('Học phần không tồn tại trong hệ thống.', 'dang-nhap', 'error');
     exit;
 }
 
-if (!$checkData['is_assigned']) {
+$sql = "SELECT `id` 
+        FROM `courses_lecturers` 
+        WHERE `course_id` = ? AND `lecturer_id` = ?";
+$isAssigned = DB::fetchOne($sql, [$courseId, $userId]);
+if (!$isAssigned) {
     showPopUp('Giảng viên không phụ trách học phần này.', 'dang-nhap', 'error');
     exit;
 }

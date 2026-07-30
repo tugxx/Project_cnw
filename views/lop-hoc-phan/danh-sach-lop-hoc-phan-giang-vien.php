@@ -1,7 +1,7 @@
 <?php
 $sections = $sections ?? [];
-$coverImage = !empty($section['cover_image']) ? $section['cover_image'] : '/Project_cnw/assets/media/default-image-section.jpg';
 $defaultCover = '/Project_cnw/assets/media/default-image-section.jpg';
+$coverImage = !empty($section['cover_image']) ? $section['cover_image'] : $defaultCover;
 $studentCount = (int)($section['total_students'] ?? 0);
 $courseId = $courseId ?? "";
 ?>

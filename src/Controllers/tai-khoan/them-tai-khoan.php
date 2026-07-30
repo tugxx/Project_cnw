@@ -9,7 +9,6 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-
 $userId = $_SESSION['user']['id'];
 
 $sql = "SELECT * 
