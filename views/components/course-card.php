@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @param array $course
+ */
 function renderCourseCard($course)
 {
 ?>
@@ -23,14 +25,21 @@ function renderCourseCard($course)
     <p style="margin-top:8px;">
         <?= nl2br(htmlspecialchars($course['description'])) ?>
     </p>
+    <a
+        href="/Project_cnw/tao-dot-dang-ky?courseId=<?= $course['id'] ?>"
+        class="btn"
+    >
+        Tạo đợt đăng ký
+    </a>
 
     <div style="margin-top:15px;">
-        <a href="#" style="
-            padding:8px 14px;
-            background:#2563eb;
-            color:white;
-            text-decoration:none;
-            border-radius:6px;">
+        <a href="/Project_cnw/chi-tiet-hoc-phan?id=<?= $course['id'] ?>"
+            style="
+                padding:8px 14px;
+                background:#2563eb;
+                color:white;
+                text-decoration:none;
+                border-radius:6px;">
             Chi tiết
         </a>
     </div>
