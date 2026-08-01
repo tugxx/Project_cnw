@@ -25,7 +25,7 @@ if ($user['role'] !== 'admin') {
 }
 
 
-$targetUserId = $_GET['id'] ?? $_POST['id'] ?? null;
+$targetUserId = $_GET['id'] ?? null;
 if (!$targetUserId) {
     showPopUp('Không tìm thấy tài khoản cần sửa.', 'danh-sach-tai-khoan', 'error');
 }

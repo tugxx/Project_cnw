@@ -17,7 +17,7 @@ if ($user['role'] !== 'lecturer') {
     exit;
 }
 
-$courseId = (int)($_GET['courseId'] ?? $_POST['courseId'] ?? 0);
+$courseId = $_GET['courseId'] ?? 0;
 $sql = "SELECT `id`, `course_code`, `course_name` 
         FROM `courses` 
         WHERE `id` = ?";

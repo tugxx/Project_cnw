@@ -38,7 +38,7 @@ if (!$sectionSession) {
 }
 
 $sql = "SELECT `id` 
-        FROM `section_students` 
+        FROM `sections_students` 
         WHERE `section_id` = ? AND `student_id` = ?";
 $isEnrolled = DB::fetchOne($sql, [$sectionId, $userId]);
 if (!$isEnrolled) {
@@ -48,50 +48,55 @@ if (!$isEnrolled) {
 
 $sectionSessionId = $sectionSession['id'];
 $errors = [];
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $groupId = trim($_POST['group_id'] ?? '');
+if (isset($_POST['join_group'])) {
+    $groupId = trim($_POST['join_group']);
     $now = date('Y-m-d H:i:s');
     if (!empty($sectionSession['group_deadline']) && $now > $sectionSession['group_deadline']) {
         $errors[] = 'Đã quá thời hạn lập/gia nhập nhóm cho đợt đăng ký này.';
     }
 
-    $sql = "SELECT * 
-            FROM `groups` 
-            WHERE `id` = ? AND `section_session_id` = ?";
-    $group = DB::fetchOne($sql, [$groupId, $sectionSessionId]);
-    if (!$group) {
-        $errors[] = 'Nhóm không tồn tại hoặc không thuộc lớp học phần này.';
-    }
-
     if (empty($errors)) {
         try {
             DB::beginTransaction();
-            $sql = "SELECT `id`, `status` 
+            $sql = "SELECT `id`, `status`, `section_session_topic_id`
                     FROM `groups` 
-                    WHERE `id` = ? 
+                    WHERE `id` = ? AND `section_session_id` = ?
                     FOR UPDATE";
-            $lockedGroup = DB::fetchOne($sql, [$groupId]);
+            $groupLocked = DB::fetchOne($sql, [$groupId, $sectionSessionId]);
 
-            if ($lockedGroup['status'] !== 'open') {
-                throw new Exception('GROUP_NOT_OPEN');
+            if (!$groupLocked) {
+                throw new Exception('GROUP_NOT_FOUND');
+            }
+
+            if ($groupLocked['status'] === 'closed') {
+                throw new Exception('GROUP_CLOSED');
             }
 
             $sql = "SELECT g.id 
                     FROM `groups` g
-                    JOIN `group_members` gm ON g.id = gm.group_id
+                    JOIN `group_members` gm 
+                        ON g.id = gm.group_id
                     WHERE g.section_session_id = ? AND gm.student_id = ?";
             $existingGroup = DB::fetchOne($sql, [$sectionSessionId, $userId]);
             if ($existingGroup) {
                 throw new Exception('ALREADY_IN_GROUP');
             }
 
-            if (!empty($sectionSession['max_members'])) {
-                $sql = "SELECT COUNT(*) as total 
-                        FROM `group_members` 
-                        WHERE `group_id` = ?";
-                $memberCount = DB::fetchOne($sql, [$groupId]);
-                if ($memberCount && $memberCount['total'] >= $sectionSession['max_members']) {
-                    throw new Exception('GROUP_FULL');
+            if (!empty($groupLocked['section_session_topic_id'])) {
+                $sql = "SELECT `max_member` 
+                        FROM `sections_sessions_topics` 
+                        WHERE `id` = ?";
+                $topic = DB::fetchOne($sql, [$groupLocked['section_session_topic_id']]);
+
+                if ($topic && !empty($topic['max_member'])) {
+                    $sql = "SELECT COUNT(*) as total 
+                            FROM `group_members` 
+                            WHERE `group_id` = ?";
+                    $memberCount = DB::fetchOne($sql, [$groupId]);
+
+                    if ($memberCount && $memberCount['total'] >= (int)$topic['max_member']) {
+                        throw new Exception('GROUP_FULL');
+                    }
                 }
             }
 
@@ -104,12 +109,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } catch (Exception $e) {
             DB::rollBack();
-            if ($e->getMessage() === "GROUP_NOT_OPEN") {
-                $errors[] = 'Nhóm này hiện đang không mở tiếp nhận thêm thành viên.';
+            
+            if ($e->getMessage() === "GROUP_NOT_FOUND") {
+                $errors[] = 'Nhóm không tồn tại hoặc không thuộc lớp học phần này.';
+            } elseif ($e->getMessage() === "GROUP_CLOSED") {
+                $errors[] = 'Nhóm này hiện đang đóng, không thể tham gia.';
             } elseif ($e->getMessage() === "ALREADY_IN_GROUP") {
                 $errors[] = 'Bạn đã tham gia một nhóm khác trong lớp học phần - đợt đăng ký này.';
             } elseif ($e->getMessage() === "GROUP_FULL") {
-                $errors[] = 'Nhóm đã đủ số lượng thành viên tối đa.';
+                $errors[] = 'Nhóm đã đạt số lượng thành viên tối đa cho đề tài này.';
             } else {
                 $errors[] = 'Đã xảy ra lỗi trong quá trình gia nhập nhóm. Vui lòng thử lại.';
                 error_log('Join Group Error: ' . $e->getMessage());
@@ -118,15 +126,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+
+if (isset($_POST['toggle_status'])) {
+    $groupId = trim($_POST['toggle_status']);
+
+    $now = date('Y-m-d H:i:s');
+    if (!empty($sectionSession['group_deadline']) && $now > $sectionSession['group_deadline']) {
+        $errors[] = 'Đã quá thời hạn thay đổi trạng thái nhóm.';
+    }
+
+    $sql = "SELECT * 
+            FROM `groups` 
+            WHERE `id` = ? AND `section_session_id` = ?";
+    $group = DB::fetchOne($sql, [$groupId, $sectionSessionId]);
+    if (!$group) {
+        $errors[] = 'Nhóm không tồn tại hoặc không thuộc lớp học phần này.';
+    }
+        
+    if (empty($errors)) {
+        $sql = "SELECT `group_id` 
+                FROM `group_members` 
+                WHERE `group_id` = ? AND `student_id` = ? AND `role` = 'leader'";
+        $isLeader = DB::fetchOne($sql, [$groupId, $userId]);
+        if (!$isLeader) {
+            $errors[] = 'Chỉ có trưởng nhóm mới có quyền đổi trạng thái nhóm.';
+        } else {
+            $newStatus = ($group['status'] === 'closed') ? 'open' : 'closed';
+            
+            $sql = "UPDATE `groups` 
+                    SET `status` = ? 
+                    WHERE `id` = ?";
+            DB::execute($sql, [$newStatus, $groupId]);
+            header("Location: /Project_cnw/danh-sach-nhom?section_id=" . $sectionId . "&session_id=" . $sessionId);
+            exit;
+        }
+    }
+}
+
+
 $sql = "SELECT `id`, `section_session_id`, `group_name`, `created_at`, `status` 
         FROM `groups` 
         WHERE `section_session_id` = ? 
         ORDER BY `created_at` ASC";
 $groups = DB::fetchAll($sql, [$sectionSessionId]) ?: [];
 
-$sql = "SELECT g.id 
-        FROM groups g
-        JOIN group_members gm 
+$sql = "SELECT g.id
+        FROM `groups` g
+        JOIN `group_members` gm
             ON g.id = gm.group_id
         WHERE g.section_session_id = ? AND gm.student_id = ?";
 $myGroup = DB::fetchOne($sql, [$sectionSessionId, $userId]);
@@ -134,10 +180,10 @@ $myGroupId = $myGroup ? $myGroup['id'] : "";
 
 $sql = "SELECT gm.group_id, gm.student_id, gm.role, gm.joined_at,
             u.full_name, u.class
-        FROM group_members gm
-        JOIN users u 
+        FROM `group_members` gm
+        JOIN `users` u
             ON gm.student_id = u.id
-        JOIN groups g 
+        JOIN `groups` g
             ON gm.group_id = g.id
         WHERE g.section_session_id = ?
         ORDER BY gm.role DESC, gm.joined_at ASC";
@@ -148,13 +194,30 @@ foreach ($allMembers as $member) {
     $membersByGroup[$member['group_id']][] = $member;
 }
 
-foreach ($groups as $key => $group) {
+$myGroupData = null;
+$otherGroups = [];
+foreach ($groups as $index => $group) {
     $groupId = $group['id'];
     $members = $membersByGroup[$groupId] ?? [];
+    $leader = (!empty($members) && $members[0]['role'] === 'leader') ? $members[0] : null;
     
-    $groups[$key]['members'] = $members;
-    $groups[$key]['total_members'] = count($members);
+    $group['stt'] = $index + 1;
+    $group['members'] = $members;
+    $group['total_members'] = count($members);
+    $group['leader_id'] = $leader ? $leader['student_id'] : null;
+    $group['leader_name'] = $leader ? $leader['full_name'] : '';
+
+    if (!empty($myGroupId) && $groupId == $myGroupId) {
+        $myGroupData = $group;
+    } else {
+        $otherGroups[] = $group;
+    }
 }
 
+if ($myGroupData !== null) {
+    array_unshift($otherGroups, $myGroupData);
+}
+$groups = $otherGroups;
+
 require_once __DIR__ . '/../../../views/layouts/header.php';
-require_once __DIR__ . '/../../../views/nhom/danh-sach-nhom.php';
+require_once __DIR__ . '/../../../views/nhom/danh-sach-nhom-sinh-vien.php';

@@ -29,16 +29,22 @@ if (empty($sectionId) || empty($sessionId)) {
     showPopUp('Thiếu thông tin lớp học phần hoặc đợt đăng ký.', 'danh-sach-lop-hoc-phan', 'error');
 }
 
-$sql = "SELECT * 
-        FROM `sections_sessions` 
-        WHERE `section_id` = ? AND `session_id` = ?";
+$sql = "SELECT ss.*,
+            s.section_code, s.section_name,
+            rs.registration_session_name
+        FROM `sections_sessions` ss
+        JOIN `sections` s 
+            ON ss.section_id = s.id
+        JOIN `registration_sessions` rs 
+            ON ss.session_id = rs.id
+        WHERE ss.section_id = ? AND ss.session_id = ?";
 $sectionSession = DB::fetchOne($sql, [$sectionId, $sessionId]);
 if (!$sectionSession) {
     showPopUp('Lớp học phần - Đợt đăng ký không tồn tại.', 'danh-sach-lop-hoc-phan', 'error');
 }
 
 $sql = "SELECT `id` 
-        FROM `section_students` 
+        FROM `sections_students` 
         WHERE `section_id` = ? AND `student_id` = ?";
 $isEnrolled = DB::fetchOne($sql, [$sectionId, $userId]);
 if (!$isEnrolled) {
@@ -49,10 +55,7 @@ if (!$isEnrolled) {
 $sectionSessionId = $sectionSession['id'];
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $groupName = trim($_POST['group_name'] ?? '');
-    if (empty($groupName)) {
-        $errors[] = 'Vui lòng nhập tên nhóm.';
-    }
+    $groupName = trim($_POST['group_name'] ?? null);
 
     if (empty($errors)) {
         $now = date('Y-m-d H:i:s');
@@ -60,35 +63,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = 'Đã quá thời hạn lập nhóm cho đợt đăng ký này.';
         }
 
-        $sql = "SELECT `id` 
-                FROM `groups`
-                WHERE `section_session_id` = ? AND `group_name` = ?";
-        if (DB::fetchOne($sql, [$sectionSessionId, $groupName])) {
-            $errors[] = 'Tên nhóm này đã tồn tại trong lớp. Vui lòng chọn tên khác.';
-        }
-
         if (empty($errors)) {
             try {
                 DB::beginTransaction();
-                $sql = "SELECT `id`, `max_groups`, `group_deadline` 
+                $sql = "SELECT `id`, `max_group`, `group_deadline` 
                         FROM `sections_sessions` 
                         WHERE `id` = ? 
                         FOR UPDATE";
-                $locked = DB::fetchOne($sql, [$sectionSessionId]);
+                $sectionSessionLocked = DB::fetchOne($sql, [$sectionSessionId]);
 
-                if (!empty($sectionSession['max_groups'])) {
+                if (!empty($sectionSessionLocked['max_group'])) {
                     $sql = "SELECT COUNT(*) as total 
                             FROM groups 
                             WHERE section_session_id = ?";
                     $groupCount = DB::fetchOne($sql, [$sectionSessionId]);
-                    if ($groupCount && $groupCount['total'] >= $sectionSession['max_groups']) {
-                        throw new Exception('MAX_GROUPS_REACHED');
+                    if ($groupCount && $groupCount['total'] >= $sectionSessionLocked['max_group']) {
+                        throw new Exception('MAX_GROUP_REACHED');
                     }
                 }
 
                 $sql = "SELECT g.id 
-                        FROM groups g
-                        JOIN group_members gm ON g.id = gm.group_id
+                        FROM `groups` g
+                        JOIN `group_members` gm 
+                            ON g.id = gm.group_id
                         WHERE g.section_session_id = ? AND gm.student_id = ?";
                 $existingGroup = DB::fetchOne($sql, [$sectionSessionId, $userId]);
                 if ($existingGroup) {
@@ -105,11 +102,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         VALUES (?, ?, 'leader', ?)";
                 DB::execute($sql, [$groupId, $userId, $createdAt]);
                 DB::commit();
-                header("Location: /Project_cnw/danh-sach-nhom?section_session_id=" . $sectionSessionId);
+                header("Location: /Project_cnw/danh-sach-nhom?section_id=" . $sectionId . "&session_id=" . $sessionId);
                 exit;
             } catch (Exception $e) {
                 DB::rollBack();
-                if ($e->getMessage()=="MAX_GROUPS_REACHED") {
+                if ($e->getMessage()=="MAX_GROUP_REACHED") {
                     $errors[] = 'Số lượng nhóm trong lớp học phần này đã đạt đến giới hạn cho phép.';
                 } elseif ($e->getMessage()=="ALREADY_IN_GROUP") {
                     $errors[] = 'Bạn đã tham gia một nhóm khác trong lớp học phần - đợt đăng ký này.';

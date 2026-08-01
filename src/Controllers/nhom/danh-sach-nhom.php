@@ -20,6 +20,7 @@ switch ($role) {
         break;
 
     default:
+        destroyUserSession();
         showPopUp('Bạn không có quyền truy cập trang này.', 'dang-nhap', 'error');
         exit;
 }

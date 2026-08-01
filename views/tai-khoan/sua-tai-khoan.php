@@ -9,7 +9,6 @@
         </div>
 
         <form method="POST" action="/Project_cnw/sua-tai-khoan&id=<?= htmlspecialchars($targetUser['id']) ?>">
-            <input type="hidden" name="id" value="<?= htmlspecialchars($targetUser['id']) ?>">
             <div class="form-grid-2">
                 <div>
                     <?php renderInput('user_code', 'Mã', 'text', $_POST['user_code'] ?? $targetUser['user_code'] ?? "", '', 'Nhập mã người dùng', true); ?>
