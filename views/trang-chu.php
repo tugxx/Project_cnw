@@ -6,9 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="index.php" method="GET">
-        <input type="hidden" name="page" value="tao-hoc-phan">
-    <?php renderButton('Khởi tạo học phần'); ?>
-</form>
+    
 </body>
 </html>

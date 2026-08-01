@@ -51,10 +51,14 @@
 
     <nav class="sidebar-nav" id="sidebarNav">
         <ul class="sidebar-nav__list">
+            <li><a href="/Project_cnw/tao-hoc-phan">Tạo học phần</a></li>
+            <li>-----------------------------------------</li>
             <li><a href="/Project_cnw">Trang chủ</a></li>
             <li><a href="/Project_cnw/danh-sach-tai-khoan">Tài khoản</a></li>
             <li><a href="/Project_cnw/tao-lop-hoc-phan?courseId=1">tao-lop-hoc-phan</a></li>
             <li><a href="/Project_cnw/danh-sach-lop-hoc-phan?courseId=1">danh-sach-lop-hoc-phan</a></li>
+            <li><a href="/Project_cnw/danh-sach-nhom?section_id=2&session_id=1">Danh sách nhóm</a></li>
+            <li><a href="/Project_cnw/tao-nhom?section_id=2&session_id=1">Tạo nhóm</a></li>
         </ul>
     </nav>
 
