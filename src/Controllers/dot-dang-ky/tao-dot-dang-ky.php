@@ -34,7 +34,7 @@
 
     // 2. XÁC ĐỊNH $courseId DỰA TRÊN THÔNG TIN ĐÃ TRUY VẤN
     // Ưu tiên lấy từ URL/POST, nếu không có thì lấy môn học ĐẦU TIÊN trong danh sách phân công
-    $courseId = (int)($_GET['courseId'] ?? $_POST['courseId'] ?? $myCourses[0]['id']);
+    $courseId = (int)($_GET['course_id'] ?? $_POST['courseId'] ?? $myCourses[0]['id']);
 
     // 3. KIỂM TRA XEM $courseId HIỆN TẠI CÓ HỢP LỆ VỚI GIẢNG VIÊN NÀY KHÔNG
     $sqlCheckAssigned = "

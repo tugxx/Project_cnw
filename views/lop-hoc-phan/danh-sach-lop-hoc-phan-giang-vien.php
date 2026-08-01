@@ -10,7 +10,7 @@ $courseId = $courseId ?? "";
 <div class="lms-container">
     <div class="lms-page-header">
         <div class="lms-header-title">
-            <h2>Học phần: <?= htmlspecialchars($checkData['course_name'] ?? 'Danh sách lớp học phần') ?></h2>
+            <h2><?= htmlspecialchars($checkData['course_name'] ?? 'Danh sách lớp học phần') ?></h2>
             <p>Mã học phần: <strong><?= htmlspecialchars($checkData['course_code'] ?? 'N/A') ?></strong></p>
         </div>
         <div class="lms-header-actions">

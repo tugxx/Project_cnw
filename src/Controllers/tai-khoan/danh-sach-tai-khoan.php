@@ -112,5 +112,5 @@ foreach ($allowedQueryKeys as $key) {
 }
 $queryString = http_build_query($queryParams);
 
-require_once __DIR__ . '/../../../views/layouts/header.php';
+require_once __DIR__ . '/../../../views/layouts/header-admin.php';
 require_once __DIR__ . '/../../../views/tai-khoan/danh-sach-tai-khoan.php';

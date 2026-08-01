@@ -29,7 +29,7 @@ if ($user['role'] !== 'lecturer') {
     exit;
 }
 
-$courseId = $_GET['courseId'] ?? 0;
+$courseId = $_GET['course_id'] ?? 0;
 $sql = "SELECT `id` 
         FROM `courses` 
         WHERE `id` = ?";
@@ -295,6 +295,8 @@ if (isset($_POST["create_section"])) {
             }
             DB::commit();
             unset($_SESSION['checked_student_ids_' . $courseId]);
+            header("Location: chi-tiet-lop-hoc-phan?course_id={$courseId}");
+            exit;
         } catch (Exception $e) {
             DB::rollBack();
             $errors[] = 'Đã xảy ra lỗi trong quá trình lưu dữ liệu. Vui lòng thử lại.';
@@ -303,5 +305,5 @@ if (isset($_POST["create_section"])) {
     }
 }
 
-require_once __DIR__ . '/../../../views/layouts/header.php';
+require_once __DIR__ . '/../../../views/layouts/header-lecturer.php';
 require_once __DIR__ . '/../../../views/lop-hoc-phan/tao-lop-hoc-phan.php';

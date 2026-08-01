@@ -12,7 +12,7 @@ if (!isset($_SESSION['user'])) {
 $errors = [];
 $success = "";
 $userId = $_SESSION['user']['id'];
-$sql = "SELECT `id`, `password`, `is_active` 
+$sql = "SELECT `id`, `password`, `is_active`, `role` 
         FROM `users` 
         WHERE `id` = ?";
 $user = DB::fetchOne($sql, [$userId]);
@@ -59,5 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } 
 
-require_once __DIR__ . '/../../../views/layouts/header.php';
+if ($user['role'] === 'admin') {
+    require_once __DIR__ . '/../../../views/layouts/header.php';
+} elseif ($user['role'] === 'lecturer') {
+    require_once __DIR__ . '/../../../views/layouts/header-lecturer.php';
+} else {
+    require_once __DIR__ . '/../../../views/layouts/header-student.php';
+}
 require_once __DIR__ . '/../../../views/tai-khoan/doi-mat-khau.php';

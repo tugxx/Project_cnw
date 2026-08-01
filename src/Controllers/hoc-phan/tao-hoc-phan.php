@@ -114,5 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 }
 
+require_once __DIR__ . '/../../../views/layouts/header-admin.php';
 require_once __DIR__ . '/../../../views/hoc-phan/tao-hoc-phan.php';
 ?>

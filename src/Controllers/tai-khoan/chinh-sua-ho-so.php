@@ -87,5 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-require_once __DIR__ . '/../../../views/layouts/header.php';
+if ($user['role'] === 'admin') {
+    require_once __DIR__ . '/../../../views/layouts/header.php';
+} elseif ($user['role'] === 'lecturer') {
+    require_once __DIR__ . '/../../../views/layouts/header-lecturer.php';
+} else {
+    require_once __DIR__ . '/../../../views/layouts/header-student.php';
+}
+
 require_once __DIR__ . '/../../../views/tai-khoan/chinh-sua-ho-so.php';

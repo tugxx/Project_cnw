@@ -1,7 +1,7 @@
 <?php
 $userId = $_SESSION['user']['id'];
-$sql = "SELECT `id`, `is_active`, role 
-        FROM ``users`` 
+$sql = "SELECT `id`, `is_active`, `role` 
+        FROM `users`
         WHERE `id` = ?";
 $user = DB::fetchOne($sql, [$userId]);
 
@@ -17,12 +17,13 @@ if ($user['role'] !== 'lecturer') {
     exit;
 }
 
-$courseId = $_GET['courseId'] ?? 0;
+$courseId = $_GET['course_id'] ?? 0;
 $sql = "SELECT `id`, `course_code`, `course_name` 
-        FROM `courses` 
+        FROM `courses`
         WHERE `id` = ?";
 $course = DB::fetchOne($sql, [$courseId]);
 if (!$course) {
+    destroyUserSession();
     showPopUp('Học phần không tồn tại trong hệ thống.', 'dang-nhap', 'error');
     exit;
 }
@@ -46,6 +47,6 @@ $sql = "SELECT s.id AS section_id, s.section_code, s.section_name, s.description
                 ORDER BY s.id DESC";
 $sections = DB::fetchAll($sql, [$courseId]);
 
-require_once __DIR__ . '/../../../views/layouts/header.php';
+require_once __DIR__ . '/../../../views/layouts/header-lecturer.php';
 require_once __DIR__ . '/../../../views/lop-hoc-phan/danh-sach-lop-hoc-phan-giang-vien.php';
 ?>

@@ -1,6 +1,4 @@
-<?php 
-require_once __DIR__.'/../layouts/header.php'; 
-?>
+
 
 
 <h2>
@@ -69,7 +67,7 @@ require_once __DIR__.'/../layouts/header.php';
 
 <tr>
 
-    <td><?= htmlspecialchars($session['session_name']) ?></td>
+    <td><?= htmlspecialchars($session['registration_session_name']) ?></td>
     
     <td><?= $session['sections'] ?></td>
     
@@ -77,7 +75,7 @@ require_once __DIR__.'/../layouts/header.php';
 
     <td><?= $session['end_time'] ?></td>
 
-    <td><?= $session['max_groups'] ?></td>
+    <td><?= $session['max_group'] ?></td>
 
     <td>
 

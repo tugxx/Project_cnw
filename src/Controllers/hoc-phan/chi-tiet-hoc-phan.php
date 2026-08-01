@@ -1,8 +1,5 @@
 <?php
-$courseId = (int)($_GET['id'] ?? 0);
-
-
-var_dump($courseId);
+$courseId = (int)($_GET['course_id'] ?? 0);
 
 if (!isLoggedIn()) {
     header("Location: dang-nhap");
@@ -33,9 +30,8 @@ if (!$course) {
     die("Học phần không tồn tại.");
 }
 
-/*
-Nếu là giảng viên thì kiểm tra quyền
-*/
+
+
 if ($role == 'lecturer') {
 
     $sql = "
@@ -58,10 +54,10 @@ if ($role == 'lecturer') {
 $sql = "
 SELECT
     rs.id,
-    rs.session_name,
+    rs.registration_session_name,
     rs.start_time,
     rs.end_time,
-    rs.max_groups,
+    MAX(ss.max_group) AS max_group,
     GROUP_CONCAT(
         CONCAT(s.section_code,' - ',s.section_name)
         ORDER BY s.section_code
@@ -69,7 +65,7 @@ SELECT
     ) AS sections
 FROM registration_sessions rs
 
-LEFT JOIN session_sections ss
+LEFT JOIN sections_sessions ss
 ON rs.id = ss.session_id
 
 LEFT JOIN sections s
@@ -84,5 +80,7 @@ ORDER BY rs.created_at DESC
 
 $registrationSessions = DB::fetchAll($sql, [$courseId]);
 
+
+require_once __DIR__.'/../../../views/layouts/header-lecturer.php'; 
 require_once __DIR__.'/../../../views/hoc-phan/chi-tiet-hoc-phan.php';
 ?>
