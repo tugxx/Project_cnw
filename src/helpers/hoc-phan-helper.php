@@ -12,7 +12,7 @@ if (!defined('ALLOW_ACCESS')) {
 function courseNameExists($courseName)
 {
     $sql = "
-        SELECT course_id
+        SELECT id
         FROM courses
         WHERE course_name = ?
         LIMIT 1
@@ -27,9 +27,9 @@ function courseNameExists($courseName)
 function generateCourseCode()
 {
     $sql = "
-        SELECT course_id
+        SELECT id
         FROM courses
-        ORDER BY course_id DESC
+        ORDER BY id DESC
         LIMIT 1
     ";
 
@@ -39,7 +39,7 @@ function generateCourseCode()
         return 'HP0001';
     }
 
-    $next = $course['course_id'] + 1;
+    $next = $course['id'] + 1;
 
     return 'HP' . str_pad($next, 4, '0', STR_PAD_LEFT);
 }

@@ -10,7 +10,9 @@ require_once __DIR__ . '/src/DB.php';
 require_once __DIR__ . '/src/helpers/tai-khoan-helper.php';
 require_once __DIR__ . '/src/helpers/hoc-phan-helper.php'; 
 require_once __DIR__ . '/src/helpers/url-helper.php'; 
-require_once __DIR__ . '/src/helpers/label-helper.php'; 
+require_once __DIR__ . '/src/helpers/label-helper.php';
+require_once __DIR__ . '/src/helpers/dot-dang-ky-helper.php'; 
+
 require_once __DIR__ . '/src/libs/SimpleXLSX.php';
 
 require_once __DIR__ . '/views/components/pop-up.php';
@@ -45,13 +47,19 @@ $routes = [
     // lop-hoc-phan
     'tao-lop-hoc-phan'   => __DIR__ . '/src/Controllers/lop-hoc-phan/tao-lop-hoc-phan.php',
     'danh-sach-lop-hoc-phan' => __DIR__ . '/src/Controllers/lop-hoc-phan/danh-sach-lop-hoc-phan.php',
-
-
-
+    'chi-tiet-hoc-phan'    => __DIR__.'/src/Controllers/hoc-phan/chi-tiet-hoc-phan.php',
 
     // nhom
     'tao-nhom'   => __DIR__ . '/src/Controllers/nhom/tao-nhom.php',
     'danh-sach-nhom'   => __DIR__ . '/src/Controllers/nhom/danh-sach-nhom.php',
+
+    // them dot dang ki
+    'tao-dot-dang-ky'=> __DIR__.'/src/Controllers/dot-dang-ky/tao-dot-dang-ky.php',
+    'danh-sach-dot-dang-ky'=> __DIR__.'/src/Controllers/dot-dang-ky/danh-sach-dot-dang-ky.php',
+    'chi-tiet-dot-dang-ky'  => __DIR__.'/src/Controllers/dot-dang-ky/chi-tiet-dot-dang-ky.php',
+    'sua-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/sua-dot-dang-ky.php',
+    'xoa-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/xoa-dot-dang-ky.php',
+
 
     //
     'trang-chu'         => __DIR__ . '/src/Controllers/trang-chu.php',

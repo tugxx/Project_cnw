@@ -31,11 +31,11 @@ $sql = "
     SELECT
         id,
         username,
-        name
+        full_name
     FROM users
     WHERE role = 'lecturer'
       AND is_active = 1
-    ORDER BY name ASC
+    ORDER BY full_name ASC
 ";
 
 $lecturers = DB::fetchAll($sql);
@@ -59,12 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } 
 
     if (empty($errors)) {
-        $course_code = generateCourseCode();
-
-        $sql = "
-            INSERT INTO courses (course_code, course_name, description)
-            VALUES (?, ?, ?)
-        ";
 
         $pdo = DB::getConnection();
 

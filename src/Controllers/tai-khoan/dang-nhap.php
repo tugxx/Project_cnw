@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } catch (PDOException $e) {
             $errors['system'] = 'Lỗi hệ thống, vui lòng thử lại sau.';
-            error_log($e->getMessage()); 
+            error_log($e->getMessage());
         }
     }
 } 

@@ -52,6 +52,9 @@
     <nav class="sidebar-nav" id="sidebarNav">
         <ul class="sidebar-nav__list">
             <li><a href="/Project_cnw/tao-hoc-phan">Tạo học phần</a></li>
+            <li><a href="/Project_cnw/danh-sach-hoc-phan">Danh sách học phần</a></li>
+            <li><a href="/Project_cnw/tao-dot-dang-ky?courseId=1">Tạo đợt đăng ký</a></li>
+            <li><a href="/Project_cnw/danh-sach-dot-dang-ky?courseId=1">Danh sách đợt đăng ký</a></li>
             <li>-----------------------------------------</li>
             <li><a href="/Project_cnw">Trang chủ</a></li>
             <li><a href="/Project_cnw/danh-sach-tai-khoan">Tài khoản</a></li>

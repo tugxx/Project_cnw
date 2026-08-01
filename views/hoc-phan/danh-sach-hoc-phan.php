@@ -11,20 +11,13 @@ gap:20px;
 ">
 
 <?php
+    if (!isset($courses) || !is_array($courses)) {
+        $courses = [];
+    }
 
-$sql = "
-SELECT *
-FROM courses
-ORDER BY course_id DESC
-";
-
-$courses = DB::fetchAll($sql);
-
-foreach($courses as $course){
-
-    renderCourseCard($course);
-
-}
+    foreach ($courses as $course) {
+        renderCourseCard($course);
+    }
 
 ?>
 

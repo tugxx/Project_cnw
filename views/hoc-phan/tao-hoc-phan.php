@@ -4,11 +4,11 @@ $sql = "
     SELECT
         id,
         username,
-        name
+        full_name
     FROM users
     WHERE role = 'lecturer'
       AND is_active = 1
-    ORDER BY name ASC
+    ORDER BY full_name ASC
 ";
 
 $lecturers = DB::fetchAll($sql);
@@ -149,7 +149,7 @@ $lecturers = DB::fetchAll($sql);
                                 <span>
 
                                     <strong>
-                                        <?= htmlspecialchars($lecturer['name']) ?>
+                                        <?= htmlspecialchars($lecturer['full_name']) ?>
                                     </strong>
 
                                     <span style="color:#6b7280;">
