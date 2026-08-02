@@ -57,7 +57,7 @@
 
         FROM sections s
 
-        LEFT JOIN session_sections ss
+        LEFT JOIN sections_sessions ss
         ON s.id = ss.section_id
 
         WHERE s.course_id = ?
@@ -138,14 +138,12 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
 
             $sql = "
             SELECT id
-            FROM session_sections
+            FROM sections_sessions
             WHERE section_id = ?
             ";
 
             if(DB::fetchOne($sql,[$sectionId])){
-
                 $errors[]="Lớp học phần đã thuộc đợt đăng ký khác.";
-
             }
 
         }
@@ -174,7 +172,6 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
             echo "<pre>";
             print_r($errors);
             echo "</pre>";
-
             try {
 
 
@@ -184,13 +181,12 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
             (
                 course_id,
                 lecturer_id,
-                session_name,
+                registration_session_name,
                 description,
-                max_groups,
                 start_time,
                 end_time
             )
-            VALUES(?,?,?,?,?,?,?)";
+            VALUES(?,?,?,?,?,?)";
 
             $sessionId = DB::insert(
                 $sql,
@@ -199,7 +195,6 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
                     $userId,
                     $sessionName,
                     $description,
-                    $maxGroups,
                     $startTime,
                     $endTime
                 ]
@@ -209,7 +204,7 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
             foreach($selectedSections as $sectionId){
 
                 $sql = "
-                INSERT INTO session_sections
+                INSERT INTO sections_sessions
                 (
                     session_id,
                     section_id,

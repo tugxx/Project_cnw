@@ -58,10 +58,17 @@ $routes = [
 
     // de tai 
     'dang-ky-de-tai' => __DIR__.'/src/Controllers/de-tai/dang-ky-de-tai.php',
+    'tao-de-tai' => __DIR__.'/src/Controllers/de-tai/tao-de-tai.php',
+    'sua-de-tai' => __DIR__.'/src/Controllers/de-tai/sua-de-tai.php',
+    'xoa-de-tai' => __DIR__.'/src/Controllers/de-tai/xoa-de-tai.php',
+    'sua-dang-ky-de-tai'=> __DIR__.'/src/Controllers/de-tai/sua-dang-ky-de-tai.php',
+    'danh-sach-de-tai' => __DIR__.'/src/Controllers/de-tai/danh-sach-de-tai.php',
+
+    'huy-dang-ky-de-tai'=> __DIR__.'/src/Controllers/de-tai/huy-dang-ky-de-tai.php',
 
     // them dot dang ki
-    'tao-dot-dang-ky'=> __DIR__.'/src/Controllers/dot-dang-ky/tao-dot-dang-ky.php',
-    'danh-sach-dot-dang-ky'=> __DIR__.'/src/Controllers/dot-dang-ky/danh-sach-dot-dang-ky.php',
+    'tao-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/tao-dot-dang-ky.php',
+    'danh-sach-dot-dang-ky' => __DIR__.'/src/Controllers/dot-dang-ky/danh-sach-dot-dang-ky.php',
     'sua-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/sua-dot-dang-ky.php',
     'xoa-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/xoa-dot-dang-ky.php',
 
@@ -75,5 +82,4 @@ if (array_key_exists($page, $routes) && file_exists($routes[$page])) {
     header("HTTP/1.1 404 Not Found");
     require_once __DIR__ . '/views/404.php';
 }
-
 ?>

@@ -52,9 +52,10 @@
     <nav class="sidebar-nav" id="sidebarNav">
         <ul class="sidebar-nav__list">
             <li><a href="/Project_cnw">Trang chủ</a></li>
+            <li><a href="/Project_cnw/danh-sach-de-tai?courseId=1">Danh sách đề tài</a></li>
             <li><a href="/Project_cnw/danh-sach-hoc-phan">Danh sách học phần</a></li>
-            <li><a href="/Project_cnw/tao-lop-hoc-phan?course_id=1">tao-lop-hoc-phan</a></li>
-            <li><a href="/Project_cnw/danh-sach-lop-hoc-phan?course_id=1">danh-sach-lop-hoc-phan</a></li>
+            <li><a href="/Project_cnw/tao-lop-hoc-phan?course_id=1">Tạo lớp học phần</a></li>
+            <li><a href="/Project_cnw/danh-sach-lop-hoc-phan?course_id=1">Danh sách lớp học phần</a></li>
             <li><a href="/Project_cnw/tao-dot-dang-ky?course_id=1">Tạo đợt đăng ký</a></li>
             <li><a href="/Project_cnw/danh-sach-dot-dang-ky?course_id=1">Danh sách đợt đăng ký</a></li>
             <!-- <li><a href="/Project_cnw/danh-sach-nhom?section_id=2&session_id=1">Danh sách nhóm</a></li> -->

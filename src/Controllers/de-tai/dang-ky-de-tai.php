@@ -155,7 +155,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $errors[] = "Nhóm vượt quá số thành viên cho phép.";
             }
 
-
             $sql = "
             SELECT COUNT(*) total
             FROM groups

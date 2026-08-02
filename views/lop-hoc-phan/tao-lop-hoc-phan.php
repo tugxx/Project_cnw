@@ -162,9 +162,9 @@ $courseId = $courseId ?? "";
                                                     value="1" 
                                                     <?= $isChecked ? 'checked' : '' ?>>
                                             </td>
-                                            <td><strong><?= htmlspecialchars($student['user_code']) ?></strong></td>
-                                            <td><?= htmlspecialchars($student['full_name']) ?></td>
-                                            <td><?= htmlspecialchars($student['email']) ?></td>
+                                            <td><strong><?= htmlspecialchars($student['user_code']?? '')  ?></strong></td>
+                                            <td><?= htmlspecialchars($student['full_name']?? '') ?></td>
+                                            <td><?= htmlspecialchars($student['email']?? '') ?></td>
                                             <td>
                                                 <?php if ($student['is_active']): ?>
                                                     <?php renderBadge('Hoạt động', 'green') ?>
