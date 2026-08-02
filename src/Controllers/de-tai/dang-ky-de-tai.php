@@ -4,7 +4,6 @@ if (!isLoggedIn()) {
     header("Location: dang-nhap");
     exit;
 }
-
 $userId = $_SESSION['user']['id'];
 
 if (!isUserActive($userId)) {
@@ -13,60 +12,55 @@ if (!isUserActive($userId)) {
     exit;
 }
 
-if ($_SESSION['user']['role'] != 'student') {
-    die("Chỉ sinh viên mới được đăng ký đề tài.");
-}
-
 $groupId = (int)($_GET['groupId'] ?? $_POST['groupId'] ?? 0);
+$isLeader = false;
+$hasGroup = false;
+$alreadyHasTopic = false;
+$sectionSessionId = 0;
+$totalMember = 0;
+$registrationNotice = '';
 
-if ($groupId <= 0) {
-    die("Nhóm không tồn tại.");
+if ($groupId > 0) {
+    $sql = "
+        SELECT
+            gm.role,
+            g.section_session_id,
+            g.section_session_topic_id
+        FROM `group_members` gm
+        INNER JOIN `groups` g ON gm.group_id = g.id
+        WHERE gm.`group_id` = ? AND gm.`student_id` = ?
+    ";
+
+    $member = DB::fetchOne($sql, [$groupId, $userId]);
+
+    if ($member) {
+        $hasGroup = true;
+        $sectionSessionId = $member['section_session_id'];
+        
+        if ($member['role'] === 'leader') {
+            $isLeader = true;
+        } else {
+            $registrationNotice = "Chỉ nhóm trưởng mới có quyền đăng ký đề tài.";
+        }
+
+        if ($member['section_session_topic_id']) {
+            $alreadyHasTopic = true;
+            $registrationNotice = "Nhóm của bạn đã đăng ký đề tài rồi.";
+        }
+    }
 }
 
-/*
-====================================================
-Kiểm tra thành viên nhóm
-====================================================
-*/
-
-$sql = "
-SELECT
-    gm.role,
-    g.section_session_id,
-    g.section_session_topic_id
-FROM group_members gm
-INNER JOIN groups g
-ON gm.group_id = g.id
-WHERE gm.group_id = ?
-AND gm.student_id = ?
-";
-
-$member = DB::fetchOne($sql, [$groupId, $userId]);
-
-if (!$member) {
-    die("Bạn không thuộc nhóm này.");
+if (!$sectionSessionId) {
+    $sectionSessionId = (int)($_GET['sectionSessionId'] ?? $_POST['sectionSessionId'] ?? 0);
 }
 
-if ($member['role'] != 'leader') {
-    die("Chỉ nhóm trưởng mới được đăng ký đề tài.");
+if ($sectionSessionId <= 0) {
+    die("Không tìm thấy thông tin đợt đăng ký.");
 }
 
-$sectionSessionId = $member['section_session_id'];
-
-if ($member['section_session_topic_id']) {
-    die("Nhóm đã đăng ký đề tài.");
-}
-
-/*
-====================================================
-Kiểm tra hạn chọn đề tài
-====================================================
-*/
-
-$sql = "
-SELECT topic_deadline
-FROM sections_sessions
-WHERE id = ?
+$sql = "SELECT `topic_deadline`
+        FROM `sections_sessions`
+        WHERE `id` = ?
 ";
 
 $sectionSession = DB::fetchOne($sql, [$sectionSessionId]);
@@ -75,37 +69,34 @@ if (!$sectionSession) {
     die("Đợt đăng ký không tồn tại.");
 }
 
-if (
-    $sectionSession['topic_deadline'] != null &&
-    strtotime($sectionSession['topic_deadline']) < time()
-) {
-    die("Đã hết thời gian đăng ký đề tài.");
+$isExpired = false;
+if ($sectionSession['topic_deadline'] != null && strtotime($sectionSession['topic_deadline']) < time()) {
+    $isExpired = true;
+    $registrationNotice = "Đã hết thời hạn đăng ký đề tài.";
 }
 
+if ($hasGroup) {
+    $sql = "
+        SELECT COUNT(*) total
+        FROM group_members
+        WHERE group_id = ?
+    ";
+    $countResult = DB::fetchOne($sql, [$groupId]);
+    $totalMember = (int)($countResult['total'] ?? 0);
+}
 
-$sql = "
-SELECT COUNT(*) total
-FROM group_members
-WHERE group_id = ?
-";
-
-$totalMember = DB::fetchOne($sql, [$groupId]);
-$totalMember = $totalMember['total'];
-
-
-$sql = "
-SELECT
-    sst.id,
-    t.topic_name,
-    t.description,
-    sst.min_member,
-    sst.max_member,
-    sst.max_group
-FROM sections_sessions_topics sst
-INNER JOIN topics t
-ON t.id = sst.topic_id
-WHERE sst.section_session_id = ?
-ORDER BY t.topic_name
+$sql = "SELECT
+        sst.id,
+        t.topic_name,
+        t.description,
+        sst.min_member,
+        sst.max_member,
+        sst.max_group,
+        (SELECT COUNT(*) FROM `groups` g WHERE g.section_session_topic_id = sst.id) AS `current_groups`
+    FROM `sections_sessions_topics` sst
+    INNER JOIN `topics` t ON t.id = sst.topic_id
+    WHERE sst.section_session_id = ?
+    ORDER BY t.topic_name
 ";
 
 $topics = DB::fetchAll($sql, [$sectionSessionId]);
@@ -114,6 +105,16 @@ $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    if (!$hasGroup) {
+        $errors[] = "Bạn chưa tham gia nhóm nào.";
+    } elseif (!$isLeader) {
+        $errors[] = "Chỉ nhóm trưởng mới được đăng ký đề tài.";
+    } elseif ($alreadyHasTopic) {
+        $errors[] = "Nhóm đã đăng ký đề tài.";
+    } elseif ($isExpired) {
+        $errors[] = "Đã hết thời gian đăng ký đề tài.";
+    }
+
     $sectionSessionTopicId = (int)($_POST['section_session_topic_id'] ?? 0);
 
     if ($sectionSessionTopicId <= 0) {
@@ -121,15 +122,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (empty($errors)) {
-
-
         $sql = "
         SELECT
-            min_member,
-            max_member,
-            max_group
-        FROM sections_sessions_topics
-        WHERE id = ?
+            `min_member`,
+            `max_member`,
+            `max_group`
+        FROM `sections_sessions_topics`
+        WHERE `id` = ?
         ";
 
         $topic = DB::fetchOne($sql, [$sectionSessionTopicId]);
@@ -139,8 +138,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[] = "Đề tài không tồn tại.";
 
         } else {
-
-
             if (
                 $topic['min_member'] != null &&
                 $totalMember < $topic['min_member']
@@ -155,21 +152,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $errors[] = "Nhóm vượt quá số thành viên cho phép.";
             }
 
-            $sql = "
-            SELECT COUNT(*) total
-            FROM groups
-            WHERE section_session_topic_id = ?
+            $sql = "SELECT COUNT(*) total
+                FROM `groups`
+                WHERE `section_session_topic_id` = ?
             ";
-
             $count = DB::fetchOne($sql, [$sectionSessionTopicId]);
 
-            if (
-                $topic['max_group'] != null &&
-                $count['total'] >= $topic['max_group']
-            ) {
-
-                $errors[] = "Đề tài đã đủ số nhóm.";
-
+            if ($topic['max_group'] != null && $count['total'] >= $topic['max_group']) {
+                $errors[] = "Đề tài đã đủ số nhóm đăng ký.";
             }
 
         }
@@ -179,9 +169,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($errors)) {
 
         $sql = "
-        UPDATE groups
-        SET section_session_topic_id = ?
-        WHERE id = ?
+        UPDATE `groups`
+        SET `section_session_topic_id` = ?
+        WHERE `id` = ?
         ";
 
         DB::execute($sql, [
@@ -195,4 +185,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 }
 
+$canSubmit = $hasGroup && $isLeader && !$alreadyHasTopic && !$isExpired;
 require_once __DIR__.'/../../../views/de-tai/dang-ky-de-tai.php';
