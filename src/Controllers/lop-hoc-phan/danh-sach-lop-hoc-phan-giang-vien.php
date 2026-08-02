@@ -1,10 +1,9 @@
 <?php
 $userId = $_SESSION['user']['id'];
-$sql = "SELECT `id`, `is_active`, `role` 
+$sql = "SELECT `id`, `is_active`, `role`
         FROM `users`
         WHERE `id` = ?";
 $user = DB::fetchOne($sql, [$userId]);
-
 if (!$user || !$user['is_active']) {
     destroyUserSession();
     showPopUp('Tài khoản của bạn không tồn tại hoặc đã bị khoá.', 'dang-nhap', 'error');

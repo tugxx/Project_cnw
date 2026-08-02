@@ -1,5 +1,6 @@
 <?php 
 $sections = $sections ?? [];
+$topics = $topics ?? [];
 $courseId = $courseId ?? 0;
 require_once __DIR__.'/../layouts/header-lecturer.php'; 
 ?>
@@ -95,9 +96,9 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
         <label>Số nhóm tối đa</label><br>
         <input
             type="number"
-            name="max_groups"
+            name="max_group"
             min="1"
-            value="<?= $_POST['max_groups'] ?? '' ?>"
+            value="<?= $_POST['max_group'] ?? '' ?>"
         >
     </div>
 
@@ -139,6 +140,27 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
     <?php endforeach; ?>
 
     <hr>
+        <hr>
+
+    <h3>Chọn đề tài áp dụng</h3>
+
+    <?php foreach($topics as $topic): ?>
+
+    <label>
+
+        <input
+            type="checkbox"
+            name="topics[]"
+            value="<?= $topic['id'] ?>"
+        >
+
+        <?= htmlspecialchars($topic['topic_name']) ?>
+
+    </label>
+
+    <br>
+
+    <?php endforeach; ?>
 
     <button type="submit">
         Tạo đợt đăng ký

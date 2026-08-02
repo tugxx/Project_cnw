@@ -45,10 +45,17 @@ $courseId = $courseId ?? "";
     <div class="lms-control-bar">
         <div class="lms-search-box">
             <span class="lms-search-icon">🔍</span>
-            <input type="text" id="searchInput" class="lms-search-input" placeholder="Tìm theo tên hoặc mã lớp..." onkeyup="filterSectionCards()">
+            <input
+                type="text"
+                id="searchInput"
+                class="lms-search-input"
+                placeholder="Tìm lớp học phần..."
+                onkeyup="filterSectionCards()">
         </div>
         <div>
-            Tổng số: <?php renderBadge(count($sections) . ' lớp học phần', 'blue'); ?>
+            <span class="badge" style="background-color: blue; color: white; padding: 5px 10px; border-radius: 12px; font-size: 14px;">
+                <?= count($sections) ?> lớp học phần
+            </span>
         </div>
     </div>
 
@@ -123,40 +130,46 @@ $courseId = $courseId ?? "";
                         <p class="section-card-desc">
                             <?= htmlspecialchars($section['description'] ?: 'Chưa có mô tả cho lớp học phần này.') ?>
                         </p>
-
-                        <div class="section-card-footer">
-                            <span class="section-card-meta">
-                                Ngày tạo: <?= date('d/m/Y', strtotime($section['created_at'])) ?>
-                            </span>
-                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
             <div class="lms-empty-state">
-                <p style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Chưa có lớp học phần nào</p>
-                <p style="font-size: 14px; color: #9ca3af; margin: 0;">Bấm vào nút "Tạo lớp học phần" để tạo lớp đầu tiên cho học phần này.</p>
+                <p style="font-size:18px; font-weight:600;">
+                    Chưa có lớp học phần nào
+                </p>
+                <p style="color:#6b7280;">
+                    Bạn chưa được phân công quản lý lớp học phần nào.
+                </p>
             </div>
         <?php endif; ?>
     </div>
 </div>
 
+
 <script>
-function filterSectionCards() {
-    const filter = document.getElementById('searchInput').value.toLowerCase().trim();
-    const cards = document.querySelectorAll('#sectionGrid .section-card');
+function filterSectionCards(){
+    const filter=document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
 
-    cards.forEach(card => {
-        const code = card.getAttribute('data-code') || '';
-        const name = card.getAttribute('data-name') || '';
+    const cards=document.querySelectorAll(
+        "#sectionGrid .section-card"
+    );
 
-        if (code.includes(filter) || name.includes(filter)) {
-            card.style.display = "flex";
+    cards.forEach(card=>{
+        const code=card.dataset.code;
+        const name=card.dataset.name;
+        if(code.includes(filter) || name.includes(filter)){
+            card.style.display="flex";
         } else {
-            card.style.display = "none";
+            card.style.display="none";
         }
     });
 }
+
 
 function toggleSessionDropdown(event, dropdownId) {
     event.stopPropagation();

@@ -37,6 +37,9 @@
         class="btn">
         Tạo đợt đăng ký
     </a>
+    <a href="index.php?page=danh-sach-de-tai&courseId=<?= htmlspecialchars($course['id'] ?? '') ?>">
+        Danh sách đề tài
+    </a>
 
 </div>
 
