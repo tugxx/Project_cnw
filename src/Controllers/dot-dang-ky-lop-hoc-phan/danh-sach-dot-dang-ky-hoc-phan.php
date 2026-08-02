@@ -12,11 +12,11 @@ if (!isset($_SESSION['user'])) {
 $role = $_SESSION['user']['role'] ?? '';
 switch ($role) {
     case 'lecturer':
-        require_once __DIR__ . '/danh-sach-lop-hoc-phan-giang-vien.php';
+        require_once __DIR__ . '/danh-sach-dot-dang-ky-hoc-phan-giang-vien.php';
         break;
 
     case 'student':
-        require_once __DIR__ . '/danh-sach-lop-hoc-phan-sinh-vien.php';
+        require_once __DIR__ . '/danh-sach-dot-dang-ky-hoc-phan-sinh-vien.php';
         break;
 
     default:

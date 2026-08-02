@@ -45,17 +45,6 @@ if ($maxGroup !== null && count($groups) >= $maxGroup) {
                 <a href="<?= "/Project_cnw/tao-nhom?section_id=" . urlencode($sectionId) . "&session_id=" . urlencode($sessionId) ?>" class="btn-create-link">
                     <?php renderButton('Tạo nhóm mới', 'button', 'background-color: #2563eb; color: #fff; cursor: pointer;'); ?>
                 </a>
-            <?php else: 
-                renderButton(
-                    'Tạo nhóm mới', 
-                    'button', 
-                    'cursor: not-allowed; opacity: 0.7;', 
-                    false, 
-                    '#9ca3af', 
-                    '#9ca3af', 
-                    'disabled'
-                );
-            ?>
             <?php endif; ?>
         </div>
     </div>
@@ -104,26 +93,13 @@ if ($maxGroup !== null && count($groups) >= $maxGroup) {
                             <?php endif; ?>
                         </div>
                         <div class="header-badge">
-                            <?php if ($group['leader_id'] == $userId): ?>
-                                <form action="" method="POST" class="form-toggle-status">
-                                    <button type="submit" 
-                                        name="toggle_status" 
-                                        value="<?= $group['id'] ?>" 
-                                        class="badge-btn badge-<?= $group['status'] === 'closed' ? 'red' : 'green' ?>"
-                                        title="Bấm vào đây để <?= $group['status'] === 'closed' ? 'mở nhóm' : 'khóa nhóm' ?>">
-                                    
-                                    <span><?= $group['status'] === 'closed' ? 'Đã khóa' : 'Đang mở' ?></span>
-                                </button>
-                                </form>
-                            <?php else: ?>
-                                <?php 
-                                    if ($group['status'] === 'closed') {
-                                        renderBadge('Đã khóa', 'red');
-                                    } else {
-                                        renderBadge('Đang mở', 'green');
-                                    }
-                                ?>
-                            <?php endif; ?>
+                            <?php 
+                            if ($group['status'] === 'closed') {
+                                    renderBadge('Đã khóa', 'red');
+                                } else {
+                                    renderBadge('Đang mở', 'green');
+                                }
+                            ?>
                         </div>
                     </div>
 
@@ -159,56 +135,18 @@ if ($maxGroup !== null && count($groups) >= $maxGroup) {
 
                     <div class="card-footer">
                         <?php if ($isMyGroup): ?>
-                            <?php 
-                            $isLeader = ($group['leader_id'] == $userId);
-                            if ($isLeader): ?>
-                                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; width: 100%;">
-                                <?php if (!$isExpired): ?>
-                                    <a href="<?= "/Project_cnw/chuyen-quyen?group_id=" . urlencode($group['id']) ?>" style="text-decoration: none;">
-                                    <?php 
-                                        renderButton(
-                                            'Chuyển quyền', 
-                                            'button', 
-                                            'background-color: #4b5563;', 
-                                            false, 
-                                            '#374151', 
-                                            '#4b5563'
-                                        ); 
-                                    ?>
-                                </a>
-
-                                <form action="" method="POST" class="disband-form" onsubmit="return confirm('Bạn có chắc chắn muốn giải tán nhóm?');">
-                                    <input type="hidden" name="group_id" value="<?= $group['id'] ?>">
-                                    <?php 
-                                        renderButton(
-                                            'Giải tán nhóm', 
-                                            'submit', 
-                                            'background-color: #991b1b;', 
-                                            false, 
-                                            '#7f1d1d', 
-                                            '#991b1b', 
-                                            'name="disband_group"'
-                                        ); 
-                                    ?>
-                                </form>
-                                <?php endif; ?>
-                                </div>
-                            <?php elseif (!$isExpired): ?>
-                                <form action="" method="POST" class="leave-form" style="width: 100%; display: flex; justify-content: flex-end;">
-                                    <input type="hidden" name="group_id" value="<?= $group['id'] ?>">
-                                    <?php 
-                                        renderButton(
-                                            'Rời nhóm', 
-                                            'submit', 
-                                            'background-color: #ef4444;', 
-                                            false, 
-                                            '#dc2626', 
-                                            '#ef4444', 
-                                            'name="leave_group"'
-                                        ); 
-                                    ?>
-                                </form>
-                            <?php endif; ?>
+                            <a href="<?= "/Project_cnw/quan-ly-nhom?group_id=" . urlencode($group['id']) ?>" style="width: 100%; text-decoration: none; display: flex; justify-content: flex-end;">
+                                <?php 
+                                    renderButton(
+                                        'Quản lý nhóm', 
+                                        'button', 
+                                        'background-color: #2563eb;', 
+                                        false, 
+                                        '#1d4ed8', 
+                                        '#2563eb'
+                                    );
+                                ?>
+                            </a>
                         <?php elseif ($canJoin): ?>
                             <form action="" method="POST" class="join-form" style="width: 100%; display: flex; justify-content: flex-end;">
                                 <?php 

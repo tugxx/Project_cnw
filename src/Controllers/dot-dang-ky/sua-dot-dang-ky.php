@@ -1,6 +1,6 @@
 <?php
 
-$sessionId = (int)($_GET['id'] ?? 0);
+$sessionId = (int)($_GET['session_id'] ?? 0);
 
 if ($sessionId <= 0) {
     die("Đợt đăng ký không tồn tại.");
@@ -62,7 +62,7 @@ SELECT
     END AS is_used
 FROM sections s
 
-LEFT JOIN session_sections ss
+LEFT JOIN sections_sessions ss
 ON s.id = ss.section_id
 
 WHERE s.course_id=?
@@ -78,7 +78,7 @@ SELECT
 section_id,
 group_deadline,
 topic_deadline
-FROM session_sections
+FROM sections_sessions
 WHERE session_id=?
 ";
 
@@ -91,25 +91,19 @@ foreach($sessionSections as $item){
 }
 
 
-$sessionName=$session['session_name'];
+$sessionName=$session['registration_session_name'];
 $description=$session['description'];
-$startTime=date('Y-m-d\TH:i',strtotime($session['start_time']));
-$endTime=date('Y-m-d\TH:i',strtotime($session['end_time']));
-$maxGroups=$session['max_groups'];
+$startTime = !empty($session['start_time']) ? date('Y-m-d\TH:i', strtotime($session['start_time'])) : '';
+$endTime = !empty($session['end_time'])   ? date('Y-m-d\TH:i', strtotime($session['end_time']))   : '';
+$maxGroup = $session['max_group'] ?? '';
 
 $groupDeadline='';
 $topicDeadline='';
 
 if(!empty($sessionSections)){
-    $groupDeadline=date(
-        'Y-m-d\TH:i',
-        strtotime($sessionSections[0]['group_deadline'])
-    );
-
-    $topicDeadline=date(
-        'Y-m-d\TH:i',
-        strtotime($sessionSections[0]['topic_deadline'])
-    );
+    $firstSection  = $sessionSections[0] ?? [];
+    $groupDeadline = !empty($firstSection['group_deadline']) ? date('Y-m-d\TH:i', strtotime($firstSection['group_deadline'])) : '';
+    $topicDeadline = !empty($firstSection['topic_deadline']) ? date('Y-m-d\TH:i', strtotime($firstSection['topic_deadline'])) : '';
 }
 
 $errors=[];
@@ -117,13 +111,13 @@ $errors=[];
 
 if($_SERVER['REQUEST_METHOD']=="POST"){
 
-    $sessionName=trim($_POST['session_name']);
+    $sessionName=trim($_POST['registration_session_name']);
     $description=trim($_POST['description']);
     $startTime=$_POST['start_time'];
     $endTime=$_POST['end_time'];
     $groupDeadline=$_POST['group_deadline'];
     $topicDeadline=$_POST['topic_deadline'];
-    $maxGroups=(int)$_POST['max_groups'];
+    $maxGroup=(int)$_POST['max_group'];
     $selectedSections=$_POST['sections']??[];
 
     /*
@@ -138,7 +132,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
         $errors[]="Phải chọn ít nhất một lớp.";
     }
 
-    if($maxGroups<=0){
+    if($maxGroup<=0){
         $errors[]="Số nhóm tối đa không hợp lệ.";
     }
 
@@ -162,7 +156,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
     SELECT id
     FROM registration_sessions
     WHERE course_id=?
-    AND session_name=?
+    AND registration_session_name=?
     AND id<>?
     ";
 
@@ -182,7 +176,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
         $sql="
         SELECT id
-        FROM session_sections
+        FROM sections_sessions
         WHERE section_id=?
         AND session_id<>?
         ";
@@ -209,9 +203,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
             $sql="
             UPDATE registration_sessions
             SET
-                session_name=?,
+                registration_session_name=?,
                 description=?,
-                max_groups=?,
+                max_group=?,
                 start_time=?,
                 end_time=?
             WHERE id=?
@@ -220,7 +214,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
             DB::execute($sql,[
                 $sessionName,
                 $description,
-                $maxGroups,
+                $maxGroup,
                 $startTime,
                 $endTime,
                 $sessionId
@@ -231,7 +225,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
             */
 
             DB::execute(
-                "DELETE FROM session_sections WHERE session_id=?",
+                "DELETE FROM sections_sessions WHERE session_id=?",
                 [$sessionId]
             );
 
@@ -243,7 +237,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
                 DB::execute(
                     "
-                    INSERT INTO session_sections
+                    INSERT INTO sections_sessions
                     (
                         session_id,
                         section_id,

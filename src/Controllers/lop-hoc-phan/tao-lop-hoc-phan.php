@@ -29,13 +29,13 @@ if ($user['role'] !== 'lecturer') {
     exit;
 }
 
-$courseId = $_GET['course_id'] ?? 0;
+$courseId = $_GET['course_id'] ?? "";
 $sql = "SELECT `id` 
         FROM `courses` 
         WHERE `id` = ?";
 $course = DB::fetchOne($sql, [$courseId]);
 if (!$course) {
-    showPopUp('Học phần không tồn tại trong hệ thống.', 'dang-nhap', 'error');
+    showPopUp('Học phần không tồn tại trong hệ thống.', 'danh-sach-hoc-phan', 'error');
     exit;
 }
 
@@ -44,7 +44,7 @@ $sql = "SELECT `id`
         WHERE `course_id` = ? AND `lecturer_id` = ?";
 $isAssigned = DB::fetchOne($sql, [$courseId, $userId]);
 if (!$isAssigned) {
-    showPopUp('Giảng viên không phụ trách học phần này.', 'dang-nhap', 'error');
+    showPopUp('Giảng viên không phụ trách học phần này.', 'danh-sach-hoc-phan', 'error');
     exit;
 }
 

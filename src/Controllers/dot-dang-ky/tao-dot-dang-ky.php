@@ -63,7 +63,7 @@
 
         FROM sections s
 
-        LEFT JOIN session_sections ss
+        LEFT JOIN sections_sessions ss
         ON s.id = ss.section_id
 
         WHERE s.course_id = ?
@@ -129,7 +129,7 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
 
             $sql = "
             SELECT id
-            FROM session_sections
+            FROM sections_sessions
             WHERE section_id = ?
             ";
 
@@ -215,7 +215,7 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
                 }
 
                 $sql = "
-                INSERT INTO session_sections
+                INSERT INTO sections_sessions
                 (
                     session_id,
                     section_id,

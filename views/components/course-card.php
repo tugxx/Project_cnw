@@ -25,15 +25,9 @@ function renderCourseCard($course)
     <p style="margin-top:8px;">
         <?= nl2br(htmlspecialchars($course['description'])) ?>
     </p>
-    <a
-        href="/Project_cnw/tao-dot-dang-ky?courseId=<?= $course['id'] ?>"
-        class="btn"
-    >
-        Tạo đợt đăng ký
-    </a>
 
     <div style="margin-top:15px;">
-        <a href="/Project_cnw/chi-tiet-hoc-phan?id=<?= $course['id'] ?>"
+        <a href="/Project_cnw/danh-sach-lop-hoc-phan?course_id=<?= $course['id'] ?>"
             style="
                 padding:8px 14px;
                 background:#2563eb;

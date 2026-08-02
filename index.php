@@ -42,12 +42,13 @@ $routes = [
 
     // hoc-phan
     'tao-hoc-phan'          => __DIR__.'/src/Controllers/hoc-phan/tao-hoc-phan.php',
-    'danh-sach-hoc-phan'    =>__DIR__.'/src/Controllers/hoc-phan/danh-sach-hoc-phan.php',
+    'danh-sach-hoc-phan'    => __DIR__.'/src/Controllers/hoc-phan/danh-sach-hoc-phan.php',
+    'chi-tiet-hoc-phan'     => __DIR__.'/src/Controllers/hoc-phan/chi-tiet-hoc-phan.php',
 
     // lop-hoc-phan
     'tao-lop-hoc-phan'      => __DIR__ . '/src/Controllers/lop-hoc-phan/tao-lop-hoc-phan.php',
     'danh-sach-lop-hoc-phan'=> __DIR__ . '/src/Controllers/lop-hoc-phan/danh-sach-lop-hoc-phan.php',
-    'chi-tiet-hoc-phan'     => __DIR__.'/src/Controllers/hoc-phan/chi-tiet-hoc-phan.php',
+    'sua-lop-hoc-phan'      => __DIR__ . '/src/Controllers/lop-hoc-phan/sua-lop-hoc-phan.php',
 
     // dot dang ky
     'tao-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/tao-dot-dang-ky.php',
@@ -55,6 +56,12 @@ $routes = [
     'chi-tiet-dot-dang-ky'  => __DIR__.'/src/Controllers/dot-dang-ky/chi-tiet-dot-dang-ky.php',
     'sua-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/sua-dot-dang-ky.php',
     'xoa-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/xoa-dot-dang-ky.php',
+
+    // dot-dang-ky-lop-hoc-phan
+    'sua-dot-dang-ky-lop-hoc-phan'  => __DIR__ . '/src/Controllers/dot-dang-ky-lop-hoc-phan/sua-dot-dang-ky-lop-hoc-phan.php',
+    'danh-sach-dot-dang-ky-hoc-phan'    => __DIR__ . '/src/Controllers/dot-dang-ky-lop-hoc-phan/danh-sach-dot-dang-ky-hoc-phan.php',
+    'chi-tiet-dot-dang-ky-lop-hoc-phan'    => __DIR__ . '/src/Controllers/dot-dang-ky-lop-hoc-phan/chi-tiet-dot-dang-ky-lop-hoc-phan.php',
+    'xoa-dot-dang-ky-lop-hoc-phan'    => __DIR__ . '/src/Controllers/dot-dang-ky-lop-hoc-phan/xoa-dot-dang-ky-lop-hoc-phan.php',
 
     // nhom
     'tao-nhom'              => __DIR__ . '/src/Controllers/nhom/tao-nhom.php',

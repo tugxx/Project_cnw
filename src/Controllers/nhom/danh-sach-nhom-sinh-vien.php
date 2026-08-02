@@ -1,15 +1,5 @@
 <?php
-if (!defined('ALLOW_ACCESS')) {
-    header("HTTP/1.1 404 Not Found");
-    exit;
-}
-
-if (!isset($_SESSION['user']) || empty($_SESSION['user']['id'])) {
-    header('Location: dang-nhap');
-    exit;
-}
-
-$userId = $_SESSION['user']['id'];
+$userId = $_SESSION['user']['id'] ?? "";
 $sql = "SELECT * 
         FROM `users` 
         WHERE `id` = ?";
@@ -20,7 +10,7 @@ if (!$user || !$user['is_active']) {
 }
 
 if ($user['role'] !== 'student') {
-    showPopUp('Chức năng này chỉ dành cho sinh viên.', 'dang-nhap', 'error');
+    showPopUp('Chức năng này chỉ dành cho sinh viên.', 'trang-chu', 'error');
 }
 
 $sectionId = trim($_GET['section_id'] ?? '');
@@ -219,5 +209,5 @@ if ($myGroupData !== null) {
 }
 $groups = $otherGroups;
 
-require_once __DIR__ . '/../../../views/layouts/header.php';
+require_once __DIR__ . '/../../../views/layouts/header-student.php';
 require_once __DIR__ . '/../../../views/nhom/danh-sach-nhom-sinh-vien.php';

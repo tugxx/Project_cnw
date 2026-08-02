@@ -9,9 +9,14 @@ $courseId = $courseId ?? "";
 
 
 <link rel="stylesheet" href="/Project_cnw/assets/css/tao-lop-hoc-phan.css">
-
 <div class="create-section-container">
-    <h1 class="page-title">Tạo Lớp Học Phần Mới</h1>
+    <div class="page-header">
+        <h1 class="page-title">Tạo Lớp Học Phần Mới</h1>
+        <a href="danh-sach-lop-hoc-phan?course_id=<?= urlencode($courseId) ?>" class="btn-secondary">
+            Quay lại danh sách
+        </a>
+    </div>
+
     <?php if (!empty($errors)): ?>
         <div class="global-error-box">
             <strong>Đã xảy ra lỗi:</strong>

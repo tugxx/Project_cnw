@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($updated) {
             $_SESSION['user']['full_name'] = $fullName;
-            showPopUp('Cập nhật hồ sơ cá nhân thành công!', 'ho-so-ca-nhan', 'success');
+            header("Location: /Project_cnw/ho-so-ca-nhan");
             exit;
         } else {
             $error = 'Cập nhật thất bại. Vui lòng thử lại sau.';

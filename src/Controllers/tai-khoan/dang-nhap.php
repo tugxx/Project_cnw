@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'full_name' => $user['full_name'],
                     'class' => $user['class'],
                     'code' => $user['user_code'],
+                    'avatar' => $user['avatar'] ?? "/Project_cnw/assets/media/default-avatar.jpg"
                 ];
                 header('Location: /Project_cnw');
                 exit;

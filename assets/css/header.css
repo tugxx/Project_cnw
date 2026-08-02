@@ -101,20 +101,6 @@ body {
     display: inline-block;
 }
 
-.user-menu__trigger {
-    background: none;
-    border: none;
-    font-size: 14px;
-    font-weight: 600;
-    color: #374151;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
 .user-menu__trigger:hover {
     background: #f3f4f6;
 }
@@ -298,4 +284,44 @@ site-header {
 
 html.sidebar-open #sidebarNav {
     display: block; 
+}
+
+.user-menu__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; 
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px 12px;
+}
+
+.user-menu__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-menu__icon {
+    transition: transform 0.2s ease;
+    color: #666;
+}
+
+.user-menu.is-active .user-menu__icon {
+    transform: rotate(180deg);
+}
+
+.user-menu__trigger {
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }

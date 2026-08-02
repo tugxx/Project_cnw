@@ -23,8 +23,17 @@
             <div class="site-header__right">
                 <div class="user-menu">
                     <button class="user-menu__trigger">
-                        <span><?= htmlspecialchars(($_SESSION['user']['user_code'] ?? '') . ' ' . ($_SESSION['user']['full_name'] ?? '')) ?></span>
-                        <small>▾</small>
+                        <img 
+                            src="<?= htmlspecialchars($_SESSION['user']['avatar'] ?? "") ?>" 
+                            alt="User Avatar" 
+                            class="user-menu__avatar"
+                        />
+                        <span class="user-menu__name"> 
+                            <?= htmlspecialchars(($_SESSION['user']['user_code'] ?? '') . ' ' . ($_SESSION['user']['full_name'] ?? '')) ?>
+                        </span>
+                        <svg class="user-menu__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6"/>
+                        </svg>
                     </button>
 
                     <ul class="user-menu__dropdown">

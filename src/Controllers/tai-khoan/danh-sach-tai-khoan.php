@@ -18,11 +18,13 @@ $currentUser = DB::fetchOne($sql, [$userId]);
 if (!$currentUser || !$currentUser["is_active"]) {
     destroyUserSession();
     showPopUp('Tài khoản của bạn không tồn tại hoặc đã bị khoá.', 'dang-nhap', 'error');
+    exit;
 }
 
 if ($currentUser['role'] !== 'admin') {
     destroyUserSession();
     showPopUp('Tài khoản của bạn không phải admin', 'dang-nhap', 'error');
+    exit;
 }
 
 $search    = trim($_GET['search'] ?? '');

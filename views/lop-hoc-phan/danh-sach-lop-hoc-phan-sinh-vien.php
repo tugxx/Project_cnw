@@ -2,7 +2,7 @@
 $sections = isset($sections) ? $sections : (!empty($sectionInfo) ? [$sectionInfo] : []);
 $defaultCover = '/Project_cnw/assets/media/default-image-section.jpg';
 ?>
-<link rel="stylesheet" href="/Project_cnw/assets/css/danh-sach-lop-hoc-phan-giang-vien.css">
+<link rel="stylesheet" href="/Project_cnw/assets/css/danh-sach-lop-hoc-phan-sinh-vien.css">
 <div class="lms-container">
     <div class="lms-page-header">
         <div class="lms-header-title">
@@ -14,8 +14,8 @@ $defaultCover = '/Project_cnw/assets/media/default-image-section.jpg';
         <?php if (!empty($sections)): 
             foreach ($sections as $section): 
                 $coverImage = !empty($section['cover_image']) ? $section['cover_image'] : $defaultCover;
-                $detailUrl = "/Project_cnw/danh-sach-dot-dang-ky&sectionId=" . urlencode($section['section_id']);
-        ?>
+                $detailUrl = "/Project_cnw/danh-sach-dot-dang-ky-hoc-phan?section_id=" . urlencode($section['section_id']);?>
+                
                 <div class="section-card">
                     <a href="<?= $detailUrl ?>" class="section-card-cover-link">
                         <div class="section-card-cover">

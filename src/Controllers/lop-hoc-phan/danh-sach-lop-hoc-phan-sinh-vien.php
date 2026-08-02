@@ -28,6 +28,6 @@ $sql = "SELECT s.id AS section_id,
         ORDER BY s.id DESC";
 $sections = DB::fetchAll($sql, [$userId]);
 
-require_once __DIR__ . '/../../../views/layouts/header.php';
+require_once __DIR__ . '/../../../views/layouts/header-student.php';
 require_once __DIR__ . '/../../../views/lop-hoc-phan/danh-sach-lop-hoc-phan-sinh-vien.php';
 ?>

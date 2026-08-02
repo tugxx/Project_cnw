@@ -2,8 +2,12 @@
 $sections = $sections ?? [];
 $courseId = $courseId ?? 0;
 $selectedSections = $selectedSections ?? [];
+$sessionName = $sessionName ?? '';
+$startTime = $startTime ?? '';
+$endTime = $endTime ?? '';
+$groupDeadline = $groupDeadline ?? '';
 
-require_once __DIR__.'/../layouts/header.php';
+require_once __DIR__.'/../layouts/header-lecturer.php';
 ?>
 
 <h2>Sửa đợt đăng ký</h2>
@@ -36,7 +40,7 @@ require_once __DIR__.'/../layouts/header.php';
 
         <input
             type="text"
-            name="session_name"
+            name="registration_session_name"
             value="<?= htmlspecialchars($sessionName) ?>"
         >
 
@@ -50,7 +54,7 @@ require_once __DIR__.'/../layouts/header.php';
 
         <textarea
             name="description"
-        ><?= htmlspecialchars($description) ?></textarea>
+        ><?= htmlspecialchars($description ?? "") ?></textarea>
 
     </div>
 
