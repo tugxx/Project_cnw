@@ -1,8 +1,10 @@
 <?php 
-$sections = $sections ?? [];
-$topics = $topics ?? [];
-$courseId = $courseId ?? 0;
 require_once __DIR__.'/../layouts/header-lecturer.php'; 
+$courseId = $courseId ?? "";
+$sections = $sections ?? [];
+$selectedSections = $selectedSections ?? [];
+$topics = $topics ?? [];
+$selectedTopics = $selectedTopics ?? [];
 ?>
 
 <h2>Tạo đợt đăng ký</h2>
@@ -17,7 +19,6 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
         <?php endforeach; ?>
 
     </div>
-
 <?php endif; ?>
 
 <form method="POST">
@@ -32,7 +33,7 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
         <input
             type="text"
             name="session_name"
-            value="<?= htmlspecialchars($_POST['session_name'] ?? '') ?>"
+            value="<?= htmlspecialchars($sessionName ?? '') ?>"
         >
     </div>
 
@@ -42,7 +43,7 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
         <label>Mô tả</label><br>
         <textarea
             name="description"
-        ><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
+        ><?= htmlspecialchars($description ?? '') ?></textarea>
     </div>
 
     <br>
@@ -52,7 +53,7 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
         <input
             type="datetime-local"
             name="start_time"
-            value="<?= $_POST['start_time'] ?? '' ?>"
+            value="<?= htmlspecialchars($startTime ?? '') ?>"
         >
     </div>
 
@@ -63,7 +64,7 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
         <input
             type="datetime-local"
             name="end_time"
-            value="<?= $_POST['end_time'] ?? '' ?>"
+            value="<?= htmlspecialchars($endTime ?? '') ?>"
         >
     </div>
     <div>
@@ -72,7 +73,7 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
         <input
             type="datetime-local"
             name="group_deadline"
-            value="<?= $_POST['group_deadline'] ?? '' ?>"
+            value="<?= htmlspecialchars($groupDeadline ?? '') ?>"
         >
     </div>
 
@@ -84,7 +85,7 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
         <input
             type="datetime-local"
             name="topic_deadline"
-            value="<?= $_POST['topic_deadline'] ?? '' ?>"
+            value="<?= htmlspecialchars($topicDeadline ?? '') ?>"
         >
     </div>
 
@@ -98,11 +99,29 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
             type="number"
             name="max_group"
             min="1"
-            value="<?= $_POST['max_group'] ?? '' ?>"
+            value="<?= htmlspecialchars($maxGroup ?? '') ?>"
         >
     </div>
 
     <br>
+
+    <fieldset style="padding: 10px; border: 1px solid #ccc;">
+        <legend><strong>Cấu hình đề tài & thành viên nhóm</strong></legend>
+        <div>
+            <label>Số thành viên tối thiểu/nhóm (min_member):</label>
+            <input type="number" name="min_member" min="1" value="<?= htmlspecialchars($minMember) ?>" required>
+        </div>
+        <br>
+        <div>
+            <label>Số thành viên tối đa/nhóm (max_member):</label>
+            <input type="number" name="max_member" min="1" value="<?= htmlspecialchars($maxMember) ?>" required>
+        </div>
+        <br>
+        <div>
+            <label>Số nhóm tối đa được chọn cùng 1 đề tài (max_group):</label>
+            <input type="number" name="max_group_per_topic" min="1" value="<?= htmlspecialchars($maxGroupPerTopic) ?>" required>
+        </div>
+    </fieldset>
 
     <h3>Chọn lớp học phần</h3>
     
@@ -117,22 +136,18 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
                 name="sections[]"
                 value="<?= $section['id'] ?>"
                 <?= $section['is_used'] ? 'disabled' : '' ?>
+            <?= in_array($section['id'], $selectedSections) ? 'checked' : '' ?>
             >
 
-            <?= htmlspecialchars($section['section_code']) ?>
+            <?= htmlspecialchars($section['section_code']) ?> - <?= htmlspecialchars($section['section_name']) ?>
 
-                <?php if($section['is_used']) : ?>
+            <?php if($section['is_used']) : ?>
 
-                    <span style="color:red">
-                        (Đã thuộc đợt đăng ký khác)
-                    </span>
+                <span style="color:red">
+                    (Đã thuộc đợt đăng ký khác)
+                </span>
 
-                <?php endif; ?>
-
-            -
-
-            <?= htmlspecialchars($section['section_name']) ?>
-
+            <?php endif; ?>
         </label>
 
         <br>
@@ -146,21 +161,24 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
 
     <?php foreach($topics as $topic): ?>
 
-    <label>
+        <label>
 
-        <input
-            type="checkbox"
-            name="topics[]"
-            value="<?= $topic['id'] ?>"
-        >
+            <input
+                type="checkbox"
+                name="topics[]"
+                value="<?= $topic['id'] ?>"
+                <?= in_array($topic['id'], $selectedTopics) ? 'checked' : '' ?>
+            >
 
-        <?= htmlspecialchars($topic['topic_name']) ?>
+            <?= htmlspecialchars($topic['topic_name'] ?? "") ?>
 
-    </label>
+        </label>
 
-    <br>
+        <br>
 
     <?php endforeach; ?>
+
+    <br>
 
     <button type="submit">
         Tạo đợt đăng ký

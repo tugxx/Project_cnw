@@ -17,6 +17,7 @@
         header("Location: dang-nhap");
         exit;
     }
+
     $sqlMyCourses = "
         SELECT c.id, c.course_code, c.course_name
         FROM courses c
@@ -65,14 +66,16 @@
         ORDER BY s.section_code
     ";
 $sections = DB::fetchAll($sqlSections, [$courseId]);
+
     $sql = "
     SELECT
         t.id,
-        t.topic_name
+        t.topic_name,
+        t.description
     FROM courses_topics ct
     INNER JOIN topics t
         ON ct.topic_id = t.id
-    WHERE ct.course_id = ?
+    WHERE ct.course_id = ? AND t.deleted_at IS NULL
     ORDER BY t.topic_name
     ";
 
@@ -85,8 +88,12 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
     $endTime = '';
     $groupDeadline = '';
     $topicDeadline = '';
-    $maxGroups = '';
+    $maxGroup = 1;
+    $minMember = 1;
+    $maxMember = 5;
+    $maxGroupPerTopic = 1;
     $selectedSections = [];
+    $selectedTopics = [];
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -96,22 +103,24 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
         $endTime = $_POST['end_time'] ?? '';
         $groupDeadline = $_POST['group_deadline'] ?? '';
         $topicDeadline = $_POST['topic_deadline'] ?? '';
-        $maxGroups = (int)($_POST['max_groups'] ?? 0);
+        $maxGroup = (int)($_POST['max_group'] ?? 0);
+        $minMember = (int)($_POST['min_member'] ?? 1);
+        $maxMember = (int)($_POST['max_member'] ?? 1);
+        $maxGroupPerTopic = (int)($_POST['max_group_per_topic'] ?? 1);
+
         $selectedSections = $_POST['sections'] ?? [];
         $selectedTopics = $_POST['topics'] ?? [];
-        if(empty($selectedTopics)){
-            $errors[]="Phải chọn ít nhất một đề tài.";
-        }
+        
         if ($sessionName == '') {
             $errors[] = "Tên đợt đăng ký không được để trống.";
         }
 
-        if (empty($selectedSections)) {
-            $errors[] = "Phải chọn ít nhất một lớp học phần.";
+        if ($maxGroup <= 0) {
+            $errors[] = "Số lượng nhóm tối đa cho mỗi lớp phải lớn hơn 0.";
         }
 
-        if (!isset($_POST['max_groups']) || !is_numeric($_POST['max_groups']) || $maxGroups <= 0) {
-            $errors[] = "Số lượng nhóm tối đa không hợp lệ.";
+        if ($minMember <= 0 || $maxMember < $minMember) {
+            $errors[] = "Số thành viên tối thiểu/tối đa của nhóm không hợp lệ.";
         }
 
         if ($startTime == '' || $endTime == '') {
@@ -134,20 +143,7 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
         if ($topicDeadline == '') {
             $errors[] = "Vui lòng nhập hạn chọn đề tài.";
         }
-        foreach($selectedSections as $sectionId){
-
-            $sql = "
-            SELECT id
-            FROM sections_sessions
-            WHERE section_id = ?
-            ";
-
-            if(DB::fetchOne($sql,[$sectionId])){
-                $errors[]="Lớp học phần đã thuộc đợt đăng ký khác.";
-            }
-
-        }
-
+        
         if (
             $groupDeadline != '' &&
             $topicDeadline != '' &&
@@ -168,95 +164,70 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
             }
 
         }
+
         if (empty($errors)) {
-            echo "<pre>";
-            print_r($errors);
-            echo "</pre>";
             try {
 
 
                 DB::beginTransaction();
             $sql = "
             INSERT INTO registration_sessions
-            (
-                course_id,
-                lecturer_id,
-                registration_session_name,
-                description,
-                start_time,
-                end_time
-            )
-            VALUES(?,?,?,?,?,?)";
+            (course_id, registration_session_name, description, start_time, end_time)
+            VALUES (?, ?, ?, ?, ?)
+            ";
 
-            $sessionId = DB::insert(
-                $sql,
-                [
-                    $courseId,
-                    $userId,
-                    $sessionName,
-                    $description,
-                    $startTime,
-                    $endTime
-                ]
-            );
-            var_dump($sessionId);
+            $sessionId = DB::insert($sql, [
+                $courseId,
+                $sessionName,
+                $description,
+                $startTime,
+                $endTime
+            ]);
 
-            foreach($selectedSections as $sectionId){
-
-                $sql = "
-                INSERT INTO sections_sessions
-                (
-                    session_id,
-                    section_id,
-                    group_deadline,
-                    topic_deadline
-                )
-                VALUES
-                (?,?,?,?)
-                ";
-
-                $sectionSessionId = DB::insert(
-                    $sql,
-                    [
-                        $sessionId,
-                        $sectionId,
-                        $groupDeadline,
-                        $topicDeadline
-                    ]
-                );
-
-                foreach($selectedTopics as $topicId){
+            if (!empty($selectedSections)) {
+                foreach($selectedSections as $sectionId){
 
                     $sql = "
-                    INSERT INTO sections_sessions_topics
-                    (
-                        section_session_id,
-                        topic_id
-                    )
-                    VALUES
-                    (?,?)
+                    INSERT INTO sections_sessions
+                    (section_id, session_id, group_deadline, topic_deadline, max_group)
+                    VALUES (?, ?, ?, ?, ?)
                     ";
 
-                    DB::execute(
-                        $sql,
-                        [
-                            $sectionSessionId,
-                            $topicId
-                        ]
-                    );
+                    $sectionSessionId = DB::insert($sql, [
+                        $sectionId,
+                        $sessionId,
+                        $groupDeadline,
+                        $topicDeadline,
+                        $maxGroup
+                    ]);
 
+                    if (!empty($selectedTopics)) {
+                        foreach($selectedTopics as $topicId){
+
+                            $sql = "
+                            INSERT INTO sections_sessions_topics
+                                (section_session_id, topic_id, min_member, max_member, max_group)
+                                VALUES (?, ?, ?, ?, ?)
+                            ";
+                            DB::execute($sql, [
+                                $sectionSessionId,
+                                $topicId,
+                                $minMember,
+                                $maxMember,
+                                $maxGroupPerTopic
+                            ]);
+                        }
+                    }
                 }
             }
+            DB::commit();
 
-                DB::commit();
-
-                header("Location: index.php?page=chi-tiet-hoc-phan&id=".$courseId);
-                exit;
+            header("Location: /Project_cnw/danh-sach-lop-hoc-phan&course_id=".$courseId);
+            exit;
 
             } catch (Exception $e) {
 
                 DB::rollBack();
-
                 $errors[] = $e->getMessage();
                 error_log($e->getMessage());
             }
