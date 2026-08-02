@@ -6,6 +6,7 @@ $sessionName = $sessionName ?? '';
 $startTime = $startTime ?? '';
 $endTime = $endTime ?? '';
 $groupDeadline = $groupDeadline ?? '';
+$maxGroup = $maxGroup ?? '';
 
 require_once __DIR__.'/../layouts/header-lecturer.php';
 ?>
@@ -123,8 +124,8 @@ require_once __DIR__.'/../layouts/header-lecturer.php';
         <input
             type="number"
             min="1"
-            name="max_groups"
-            value="<?= $maxGroups ?>"
+            name="max_group"
+            value="<?= $maxGroup ?>"
         >
 
     </div>

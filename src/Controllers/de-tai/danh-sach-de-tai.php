@@ -109,4 +109,13 @@ if ($role == 'admin') {
     ]);
 
 }
+
+
+if ($_SESSION['user']['role'] === 'admin') {
+    require_once __DIR__ . '/../../../views/layouts/header-admin.php';
+} elseif ($_SESSION['user']['role'] === 'lecturer') {
+    require_once __DIR__ . '/../../../views/layouts/header-lecturer.php';
+} else {
+    require_once __DIR__ . '/../../../views/layouts/header-student.php';
+}
 require_once __DIR__.'/../../../views/de-tai/danh-sach-de-tai.php';

@@ -2,7 +2,7 @@
 $section = $section ?? [];
 ?>
 
-<link rel="stylesheet" href="/Project_cnw/assets/css/danh-sach-dot-dang-ky-hoc-phan-sinh-vien.css">
+<link rel="stylesheet" href="/Project_cnw/assets/css/danh-sach-dot-dang-ky-lop-hoc-phan-sinh-vien.css">
 <div class="session-container">
     <div class="session-page-header">
         <h1 class="session-page-title">

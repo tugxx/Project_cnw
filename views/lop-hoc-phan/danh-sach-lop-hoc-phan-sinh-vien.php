@@ -14,7 +14,7 @@ $defaultCover = '/Project_cnw/assets/media/default-image-section.jpg';
         <?php if (!empty($sections)): 
             foreach ($sections as $section): 
                 $coverImage = !empty($section['cover_image']) ? $section['cover_image'] : $defaultCover;
-                $detailUrl = "/Project_cnw/danh-sach-dot-dang-ky-hoc-phan?section_id=" . urlencode($section['section_id']);?>
+                $detailUrl = "/Project_cnw/danh-sach-dot-dang-ky-lop-hoc-phan?section_id=" . urlencode($section['section_id']);?>
                 
                 <div class="section-card">
                     <a href="<?= $detailUrl ?>" class="section-card-cover-link">

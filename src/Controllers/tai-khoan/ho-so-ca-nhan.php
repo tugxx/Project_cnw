@@ -21,7 +21,7 @@ if (!$user || !$user["is_active"]) {
 }
 
 if ($user['role'] === 'admin') {
-    require_once __DIR__ . '/../../../views/layouts/header.php';
+    require_once __DIR__ . '/../../../views/layouts/header-admin.php';
 } elseif ($user['role'] === 'lecturer') {
     require_once __DIR__ . '/../../../views/layouts/header-lecturer.php';
 } else {

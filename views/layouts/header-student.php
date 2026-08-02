@@ -62,9 +62,6 @@
         <ul class="sidebar-nav__list">
             <li><a href="/Project_cnw">Trang chủ</a></li>
             <li><a href="/Project_cnw/danh-sach-lop-hoc-phan?course_id=1">Lớp học phần</a></li>
-            <li><a href="/Project_cnw/danh-sach-dot-dang-ky?course_id=1">Danh sách đợt đăng ký</a></li>
-            <li><a href="/Project_cnw/danh-sach-nhom?section_id=2&session_id=1">Danh sách nhóm</a></li>
-            <li><a href="/Project_cnw/tao-nhom?section_id=2&session_id=1">Tạo nhóm</a></li>
         </ul>
     </nav>
 

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../layouts/header.php';
+
 ?>
 
 <h2>Tạo đề tài</h2>

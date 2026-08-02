@@ -162,4 +162,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 }
 
+if ($_SESSION['user']['role'] === 'admin') {
+    require_once __DIR__ . '/../../../views/layouts/header-admin.php';
+} elseif ($_SESSION['user']['role'] === 'lecturer') {
+    require_once __DIR__ . '/../../../views/layouts/header-lecturer.php';
+} else {
+    require_once __DIR__ . '/../../../views/layouts/header-student.php';
+}
 require_once __DIR__.'/../../../views/de-tai/tao-de-tai.php';

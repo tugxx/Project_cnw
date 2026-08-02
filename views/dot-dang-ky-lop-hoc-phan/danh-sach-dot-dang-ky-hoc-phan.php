@@ -2,7 +2,7 @@
 $courseId = $courseId ?? "";
 ?>
 
-<link rel="stylesheet" href="/Project_cnw/assets/css/danh-sach-dot-dang-ky-hoc-phan-giang-vien.css">
+<link rel="stylesheet" href="/Project_cnw/assets/css/danh-sach-dot-dang-ky-hoc-phan.css">
 <div class="lms-container">
     <div class="lms-page-header">
         <div class="lms-header-tabs">

@@ -52,5 +52,5 @@ $sql = "SELECT rs.id AS session_id,
 $registrationSessions = DB::fetchAll($sql, [$sectionId]);
 
 require_once __DIR__ . '/../../../views/layouts/header-student.php';
-require_once __DIR__ . '/../../../views/dot-dang-ky-lop-hoc-phan/danh-sach-dot-dang-ky-hoc-phan-sinh-vien.php';
+require_once __DIR__ . '/../../../views/dot-dang-ky-lop-hoc-phan/danh-sach-dot-dang-ky-lop-hoc-phan-sinh-vien.php';
 ?>

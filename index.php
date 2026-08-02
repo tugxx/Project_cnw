@@ -53,6 +53,7 @@ $routes = [
     // dot-dang-ky-lop-hoc-phan
     'sua-dot-dang-ky-lop-hoc-phan'  => __DIR__ . '/src/Controllers/dot-dang-ky-lop-hoc-phan/sua-dot-dang-ky-lop-hoc-phan.php',
     'danh-sach-dot-dang-ky-hoc-phan'    => __DIR__ . '/src/Controllers/dot-dang-ky-lop-hoc-phan/danh-sach-dot-dang-ky-hoc-phan.php',
+    'danh-sach-dot-dang-ky-lop-hoc-phan'    => __DIR__ . '/src/Controllers/dot-dang-ky-lop-hoc-phan/danh-sach-dot-dang-ky-lop-hoc-phan.php',
     'chi-tiet-dot-dang-ky-lop-hoc-phan'    => __DIR__ . '/src/Controllers/dot-dang-ky-lop-hoc-phan/chi-tiet-dot-dang-ky-lop-hoc-phan.php',
     'xoa-dot-dang-ky-lop-hoc-phan'    => __DIR__ . '/src/Controllers/dot-dang-ky-lop-hoc-phan/xoa-dot-dang-ky-lop-hoc-phan.php',
 

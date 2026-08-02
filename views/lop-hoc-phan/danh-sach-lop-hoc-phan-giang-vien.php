@@ -53,7 +53,7 @@ $courseId = $courseId ?? "";
                 onkeyup="filterSectionCards()">
         </div>
         <div>
-            <span class="badge" style="background-color: blue; color: white; padding: 5px 10px; border-radius: 12px; font-size: 14px;">
+            <span class="badge" style="background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 4px 10px; border-radius: 12px; font-size: 13px; font-weight: 500;">
                 <?= count($sections) ?> lớp học phần
             </span>
         </div>
@@ -62,7 +62,7 @@ $courseId = $courseId ?? "";
     <div class="lms-section-grid" id="sectionGrid">
         <?php if (!empty($sections)): 
             foreach ($sections as $section): 
-                $detailUrl = "/Project_cnw/danh-sach-dot-dang-ky?section_id=" . urlencode($section['section_id']);
+                $detailUrl = "/Project_cnw/danh-sach-dot-dang-ky-lop-hoc-phan?section_id=" . urlencode($section['section_id']);
                 $editUrl = "/Project_cnw/sua-lop-hoc-phan?section_id=" . urlencode($section['section_id']);
                 $coverImage = !empty($section['cover_image']) ? $section['cover_image'] : $defaultCover;
                 $linkedSessions = $section['sessions'] ?? [];
