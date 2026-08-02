@@ -17,8 +17,6 @@
         header("Location: dang-nhap");
         exit;
     }
-
-    // 1. LẤY DANH SÁCH CÁC HỌC PHẦN ĐƯỢC PHÂN CÔNG CHO GIẢNG VIÊN NÀY
     $sqlMyCourses = "
         SELECT c.id, c.course_code, c.course_name
         FROM courses c
@@ -27,16 +25,13 @@
     ";
     $myCourses = DB::fetchAll($sqlMyCourses, [$userId]);
 
-    // Nếu giảng viên chưa được phân công môn nào
     if (empty($myCourses)) {
         die("Bạn chưa được phân công quản lý học phần nào.");
     }
 
-    // 2. XÁC ĐỊNH $courseId DỰA TRÊN THÔNG TIN ĐÃ TRUY VẤN
-    // Ưu tiên lấy từ URL/POST, nếu không có thì lấy môn học ĐẦU TIÊN trong danh sách phân công
-    $courseId = (int)($_GET['course_id'] ?? $_POST['courseId'] ?? $myCourses[0]['id']);
+    $courseId = (int)($_GET['courseId'] ?? $_POST['courseId'] ?? $myCourses[0]['id']);
 
-    // 3. KIỂM TRA XEM $courseId HIỆN TẠI CÓ HỢP LỆ VỚI GIẢNG VIÊN NÀY KHÔNG
+
     $sqlCheckAssigned = "
         SELECT c.* 
         FROM courses c
@@ -49,7 +44,6 @@
         die("Bạn không được phân công quản lý học phần này.");
     }
 
-    // 4. LẤY DANH SÁCH LỚP HỌC PHẦN THUỘC HỌC PHẦN ĐƯỢC CHỌN
     $sqlSections = "
         SELECT
             s.id,
@@ -71,6 +65,18 @@
         ORDER BY s.section_code
     ";
 $sections = DB::fetchAll($sqlSections, [$courseId]);
+    $sql = "
+    SELECT
+        t.id,
+        t.topic_name
+    FROM courses_topics ct
+    INNER JOIN topics t
+        ON ct.topic_id = t.id
+    WHERE ct.course_id = ?
+    ORDER BY t.topic_name
+    ";
+
+    $topics = DB::fetchAll($sql, [$courseId]);
     $errors = [];
 
     $sessionName = '';
@@ -92,7 +98,10 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
         $topicDeadline = $_POST['topic_deadline'] ?? '';
         $maxGroups = (int)($_POST['max_groups'] ?? 0);
         $selectedSections = $_POST['sections'] ?? [];
-
+        $selectedTopics = $_POST['topics'] ?? [];
+        if(empty($selectedTopics)){
+            $errors[]="Phải chọn ít nhất một đề tài.";
+        }
         if ($sessionName == '') {
             $errors[] = "Tên đợt đăng ký không được để trống.";
         }
@@ -198,21 +207,6 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
             var_dump($sessionId);
 
             foreach($selectedSections as $sectionId){
-                $sql = "
-                SELECT id
-                FROM registration_sessions
-                WHERE course_id = ?
-                AND session_name = ?
-                ";
-
-                $exists = DB::fetchOne($sql, [
-                    $courseId,
-                    $sessionName
-                ]);
-
-                if ($exists) {
-                    $errors[] = "Tên đợt đăng ký đã tồn tại.";
-                }
 
                 $sql = "
                 INSERT INTO session_sections
@@ -223,9 +217,10 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
                     topic_deadline
                 )
                 VALUES
-                (?,?,?,?)";
+                (?,?,?,?)
+                ";
 
-                DB::execute(
+                $sectionSessionId = DB::insert(
                     $sql,
                     [
                         $sessionId,
@@ -235,6 +230,27 @@ $sections = DB::fetchAll($sqlSections, [$courseId]);
                     ]
                 );
 
+                foreach($selectedTopics as $topicId){
+
+                    $sql = "
+                    INSERT INTO sections_sessions_topics
+                    (
+                        section_session_id,
+                        topic_id
+                    )
+                    VALUES
+                    (?,?)
+                    ";
+
+                    DB::execute(
+                        $sql,
+                        [
+                            $sectionSessionId,
+                            $topicId
+                        ]
+                    );
+
+                }
             }
 
                 DB::commit();

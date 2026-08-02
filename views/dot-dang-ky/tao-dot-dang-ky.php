@@ -1,5 +1,6 @@
 <?php 
 $sections = $sections ?? [];
+$topics = $topics ?? [];
 $courseId = $courseId ?? 0;
 require_once __DIR__.'/../layouts/header.php'; 
 ?>
@@ -139,6 +140,27 @@ require_once __DIR__.'/../layouts/header.php';
     <?php endforeach; ?>
 
     <hr>
+        <hr>
+
+    <h3>Chọn đề tài áp dụng</h3>
+
+    <?php foreach($topics as $topic): ?>
+
+    <label>
+
+        <input
+            type="checkbox"
+            name="topics[]"
+            value="<?= $topic['id'] ?>"
+        >
+
+        <?= htmlspecialchars($topic['topic_name']) ?>
+
+    </label>
+
+    <br>
+
+    <?php endforeach; ?>
 
     <button type="submit">
         Tạo đợt đăng ký

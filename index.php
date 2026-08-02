@@ -49,16 +49,21 @@ $routes = [
     'danh-sach-lop-hoc-phan'=> __DIR__ . '/src/Controllers/lop-hoc-phan/danh-sach-lop-hoc-phan.php',
     'chi-tiet-hoc-phan'     => __DIR__.'/src/Controllers/hoc-phan/chi-tiet-hoc-phan.php',
 
-    // dot dang ky
-    'tao-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/tao-dot-dang-ky.php',
-    'danh-sach-dot-dang-ky' => __DIR__.'/src/Controllers/dot-dang-ky/danh-sach-dot-dang-ky.php',
-    'chi-tiet-dot-dang-ky'  => __DIR__.'/src/Controllers/dot-dang-ky/chi-tiet-dot-dang-ky.php',
-    'sua-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/sua-dot-dang-ky.php',
-    'xoa-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/xoa-dot-dang-ky.php',
 
     // nhom
     'tao-nhom'              => __DIR__ . '/src/Controllers/nhom/tao-nhom.php',
     'danh-sach-nhom'        => __DIR__ . '/src/Controllers/nhom/danh-sach-nhom.php',
+
+
+
+    // de tai 
+    'dang-ky-de-tai' => __DIR__.'/src/Controllers/de-tai/dang-ky-de-tai.php',
+
+    // them dot dang ki
+    'tao-dot-dang-ky'=> __DIR__.'/src/Controllers/dot-dang-ky/tao-dot-dang-ky.php',
+    'danh-sach-dot-dang-ky'=> __DIR__.'/src/Controllers/dot-dang-ky/danh-sach-dot-dang-ky.php',
+    'sua-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/sua-dot-dang-ky.php',
+    'xoa-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/xoa-dot-dang-ky.php',
 
     //
     'trang-chu'             => __DIR__ . '/src/Controllers/trang-chu.php',

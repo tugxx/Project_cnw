@@ -1,8 +1,12 @@
 <?php
 $userId = $_SESSION['user']['id'];
-$sql = "SELECT `id`, `is_active`, `role` 
-        FROM `users`
-        WHERE `id` = ?";
+
+$sql = "
+SELECT id, is_active, role
+FROM users
+WHERE id = ?
+";
+
 $user = DB::fetchOne($sql, [$userId]);
 
 if (!$user || !$user['is_active']) {
