@@ -1,8 +1,14 @@
 <?php
-require_once __DIR__.'/../layouts/header.php';
+require_once __DIR__.'/../layouts/header-student.php';
 
 $topics = $topics ?? [];
 $groupId = $groupId ?? 0;
+
+$sectionId = $sectionId ?? 0;
+$sessionId = $sessionId ?? 0;
+
+$myTopicId = $myTopicId ?? 0;
+$canSubmit = $canSubmit ?? false;
 ?>
 
 <h2>Đăng ký đề tài</h2>
@@ -44,7 +50,7 @@ $groupId = $groupId ?? 0;
 
         <tr>
 
-            <th></th>
+            <th>Chọn</th>
 
             <th>Tên đề tài</th>
 
@@ -54,11 +60,17 @@ $groupId = $groupId ?? 0;
 
             <th>Số nhóm tối đa</th>
 
+            <th>Các nhóm</th>
         </tr>
 
         <?php foreach($topics as $topic): ?>
-
-        <tr>
+            <?php 
+                $isMyGroupTopic = ($myTopicId > 0 && $myTopicId == $topic['id']);
+                $isFull = ($topic['max_group'] != null && $topic['current_groups'] >= $topic['max_group']);
+                
+                $rowBg = $isMyGroupTopic ? 'background-color: #e2f0d9;' : '';
+            ?>
+        <tr style="<?= $rowBg ?>">
 
             <td>
 
@@ -66,6 +78,7 @@ $groupId = $groupId ?? 0;
                     type="radio"
                     name="section_session_topic_id"
                     value="<?= $topic['id'] ?>"
+                    <?= $isMyGroupTopic ? 'checked' : '' ?>
                     required
                 >
 
@@ -95,8 +108,16 @@ $groupId = $groupId ?? 0;
 
             <td>
 
-                <?= $topic['max_group'] ?? 'Không giới hạn' ?>
+                <?=$topic['current_groups'] .  "/" . $topic['max_group'] ?? 'Không giới hạn' ?>
 
+            </td>
+
+            <td>
+                <?php if (!empty($topic["registered_group_names"])) {
+                    echo htmlspecialchars($topic['registered_group_names']);
+                } else {
+                    echo "Chưa có nhóm đăng ký";
+                }?>
             </td>
 
         </tr>
@@ -107,19 +128,19 @@ $groupId = $groupId ?? 0;
 
     <br>
 
+
     <button type="submit">
 
         Đăng ký đề tài
 
     </button>
-
 </form>
 
 <?php endif; ?>
 
 <br>
 
-<a href="index.php?page=chi-tiet-nhom&id=<?= $groupId ?>">
+<a href="/Project_cnw/danh-sach-nhom?section_id=<?= $sectionId ?>&session_id=<?= $sessionId ?>">
 
 Quay lại nhóm
 

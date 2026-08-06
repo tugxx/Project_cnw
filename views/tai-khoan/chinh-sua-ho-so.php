@@ -3,7 +3,15 @@ $avatarSrc = !empty($user['avatar'])
     ? '/Project_cnw/storage/uploads/avatars/' . htmlspecialchars($user['avatar'])
     : '/Project_cnw/assets/media/default-avatar.jpg';
 
-$roleName = $user['role'] ?? 'Sinh viên';
+$user = $user ?? [];
+if ($user['role'] === 'admin') {
+    $roleName = 'Quản trị viên';
+} elseif ($user['role'] === 'lecturer') {
+    $roleName = 'Giảng viên';
+} else {
+    $roleName = 'Sinh viên';
+}
+
 $fullNameVal = $_POST['full_name'] ?? $user['full_name'] ?? '';
 $dobVal = $_POST['dob'] ?? $user['dob'] ?? '';
 ?>

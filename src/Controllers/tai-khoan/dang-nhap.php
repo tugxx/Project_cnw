@@ -62,5 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } 
 
+// echo password_hash('1', PASSWORD_DEFAULT);
+
 require_once __DIR__ . '/../../../views/tai-khoan/dang-nhap.php';
 ?>

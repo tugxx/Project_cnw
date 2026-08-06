@@ -37,7 +37,7 @@ if ($maxGroup !== null && count($groups) >= $maxGroup) {
         </div>
         
         <div class="header-actions">
-            <a href="<?= "/Project_cnw/danh-sach-de-tai?section_id=" . urlencode($sectionId) . "&session_id=" . urlencode($sessionId) ?>" class="btn-create-link">
+            <a href="<?= "/Project_cnw/danh-sach-de-tai-sinh-vien?section_id=" . urlencode($sectionId) . "&session_id=" . urlencode($sessionId) . "&group_id=" . urldecode($myGroupId)?>" class="btn-create-link">
                 <?php renderButton('Xem đề tài', 'button', 'background-color: #2563eb; color: #fff; cursor: pointer;'); ?>
             </a>
 
@@ -124,8 +124,6 @@ if ($maxGroup !== null && count($groups) >= $maxGroup) {
                                     <div class="member-role">
                                         <?php if ($member['role'] === 'leader'): ?>
                                             <?php renderBadge('Trưởng nhóm', 'blue'); ?>
-                                        <?php else: ?>
-                                            <?php renderBadge('Thành viên', 'gray'); ?>
                                         <?php endif; ?>
                                     </div>
                                 </li>
@@ -135,10 +133,10 @@ if ($maxGroup !== null && count($groups) >= $maxGroup) {
 
                     <div class="card-footer">
                         <?php if ($isMyGroup): ?>
-                            <a href="<?= "/Project_cnw/quan-ly-nhom?group_id=" . urlencode($group['id']) ?>" style="width: 100%; text-decoration: none; display: flex; justify-content: flex-end;">
+                            <a href="<?= "/Project_cnw/chi-tiet-nhom-sinh-vien?group_id=" . urlencode($group['id']) ?>" style="width: 100%; text-decoration: none; display: flex; justify-content: flex-end;">
                                 <?php 
                                     renderButton(
-                                        'Quản lý nhóm', 
+                                        'Chi tiết nhóm', 
                                         'button', 
                                         'background-color: #2563eb;', 
                                         false, 

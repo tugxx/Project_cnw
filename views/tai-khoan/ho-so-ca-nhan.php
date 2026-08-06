@@ -4,7 +4,15 @@ $avatarSrc = !empty($user['avatar'])
     : '/Project_cnw/assets/media/default-avatar.jpg';
 
 $dobFormatted = !empty($user['dob']) ? date('d/m/Y', strtotime($user['dob'])) : '---';
-$roleName = $user['role'] ?? 'Sinh viên';
+$user = $user ?? [];
+
+if ($user['role'] === 'admin') {
+    $roleName = 'Quản trị viên';
+} elseif ($user['role'] === 'lecturer') {
+    $roleName = 'Giảng viên';
+} else {
+    $roleName = 'Sinh viên';
+}
 ?>
 
 <link rel="stylesheet" href="/Project_cnw/assets/css/ho-so-ca-nhan.css">

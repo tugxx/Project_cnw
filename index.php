@@ -60,6 +60,7 @@ $routes = [
     // nhom
     'tao-nhom'              => __DIR__ . '/src/Controllers/nhom/tao-nhom.php',
     'danh-sach-nhom'        => __DIR__ . '/src/Controllers/nhom/danh-sach-nhom.php',
+    'chi-tiet-nhom-sinh-vien' => __DIR__ . '/src/Controllers/nhom/chi-tiet-nhom-sinh-vien.php',
 
     // de tai 
     'dang-ky-de-tai' => __DIR__.'/src/Controllers/de-tai/dang-ky-de-tai.php',
@@ -69,6 +70,8 @@ $routes = [
     'sua-dang-ky-de-tai'=> __DIR__.'/src/Controllers/de-tai/sua-dang-ky-de-tai.php',
     'danh-sach-de-tai' => __DIR__.'/src/Controllers/de-tai/danh-sach-de-tai.php',
     'huy-dang-ky-de-tai'=> __DIR__.'/src/Controllers/de-tai/huy-dang-ky-de-tai.php',
+
+    'danh-sach-de-tai-sinh-vien' => __DIR__.'/src/Controllers/de-tai/danh-sach-de-tai-sinh-vien.php',
 
     // them dot dang ki
     'tao-dot-dang-ky'       => __DIR__.'/src/Controllers/dot-dang-ky/tao-dot-dang-ky.php',
