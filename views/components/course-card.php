@@ -2,7 +2,7 @@
 /**
  * @param array $course
  */
-function renderCourseCard($course)
+function renderCourseCard($course, $role)
 {
 ?>
 <div style="
@@ -27,6 +27,8 @@ function renderCourseCard($course)
     </p>
 
     <div style="margin-top:15px;">
+        <?php 
+        if ($role == "lecturer"):?>
         <a href="/Project_cnw/danh-sach-lop-hoc-phan?course_id=<?= $course['id'] ?>"
             style="
                 padding:8px 14px;
@@ -36,6 +38,17 @@ function renderCourseCard($course)
                 border-radius:6px;">
             Chi tiết
         </a>
+        <?php elseif ($role == "admin"): ?>
+        <a href="/Project_cnw/chi-tiet-hoc-phan?course_id=<?= $course['id'] ?>"
+        style="
+            padding:8px 14px;
+            background:#2563eb;
+            color:white;
+            text-decoration:none;
+            border-radius:6px;">
+        Chi tiết
+        </a>
+        <?php endif; ?>
     </div>
 
 </div>

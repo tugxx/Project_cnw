@@ -155,9 +155,20 @@ if (isset($_POST['action']) && $_POST['action'] === 'disband_group') {
         $errors[] = 'Chỉ trưởng nhóm mới có quyền giải tán nhóm.';
     } elseif (!empty($group['group_deadline']) && $now > $group['group_deadline']) {
         $errors[] = 'Đã quá thời hạn thay đổi nhóm.';
-    } else {
+    } elseif (!empty($group['topic_deadline']) && $now > $group['topic_deadline']) {
+        $errors[] = 'Đã quá thời hạn chọn đề tài. Nếu giải tán nhóm sẽ không thể chọn đề tài.';
+    }  else {
         try {
             DB::beginTransaction();
+
+            $sql = "SELECT `id`, `status`, `section_session_topic_id` 
+                    FROM `groups` 
+                    WHERE `id` = ? AND `section_session_id` = ? 
+                    FOR UPDATE";
+            $groupLocked = DB::fetchOne($sql, [$groupId, $sectionSessionId]);
+            if (!$groupLocked) {
+                throw new Exception('GROUP_NOT_FOUND');
+            }
 
             $sql = "DELETE FROM `group_members` WHERE `group_id` = ?";
             DB::execute($sql, [$groupId]);
@@ -171,6 +182,13 @@ if (isset($_POST['action']) && $_POST['action'] === 'disband_group') {
         } catch (Exception $e) {
             DB::rollBack();
             $errors[] = 'Không thể giải tán nhóm. Vui lòng thử lại.';
+
+            if ($e->getMessage() === 'GROUP_NOT_FOUND') {
+                $errors[] = 'Nhóm không tồn tại hoặc đã bị xóa trước đó.';
+            } else {
+                $errors[] = 'Không thể giải tán nhóm do có lỗi hệ thống. Vui lòng thử lại.';
+                error_log('Disband Group Error: ' . $e->getMessage());
+            }
         }
     }
 }

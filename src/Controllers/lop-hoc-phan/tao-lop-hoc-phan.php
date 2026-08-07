@@ -295,7 +295,7 @@ if (isset($_POST["create_section"])) {
             }
             DB::commit();
             unset($_SESSION['checked_student_ids_' . $courseId]);
-            header("Location: chi-tiet-lop-hoc-phan?course_id={$courseId}");
+            header("Location: /Project_cnw/danh-sach-lop-hoc-phan?course_id={$courseId}");
             exit;
         } catch (Exception $e) {
             DB::rollBack();

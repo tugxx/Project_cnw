@@ -1,3 +1,7 @@
+<?php 
+$role = $role ?? "";
+?>
+
 <h2>Danh sách học phần</h2>
 
 <div style="
@@ -12,7 +16,7 @@ gap:20px;
     }
 
     foreach ($courses as $course) {
-        renderCourseCard($course);
+        renderCourseCard($course, $role);
     }
 
 ?>

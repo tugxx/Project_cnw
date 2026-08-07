@@ -81,6 +81,6 @@ ORDER BY rs.created_at DESC
 $registrationSessions = DB::fetchAll($sql, [$courseId]);
 
 
-require_once __DIR__.'/../../../views/layouts/header-lecturer.php'; 
+require_once __DIR__.'/../../../views/layouts/header-admin.php'; 
 require_once __DIR__.'/../../../views/hoc-phan/chi-tiet-hoc-phan.php';
 ?>

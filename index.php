@@ -12,6 +12,7 @@ require_once __DIR__ . '/src/helpers/hoc-phan-helper.php';
 require_once __DIR__ . '/src/helpers/url-helper.php'; 
 require_once __DIR__ . '/src/helpers/label-helper.php';
 require_once __DIR__ . '/src/helpers/dot-dang-ky-helper.php'; 
+require_once __DIR__ . '/src/helpers/log-helper.php';
 
 require_once __DIR__ . '/src/libs/SimpleXLSX.php';
 
