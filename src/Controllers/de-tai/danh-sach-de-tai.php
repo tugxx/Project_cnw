@@ -57,6 +57,7 @@ if ($role == 'admin') {
     $topics = DB::fetchAll($sql);
 
 } else {
+    $courseId = $_GET["course_id"] ?? "";
 
     $sql = "
     SELECT
@@ -107,7 +108,6 @@ if ($role == 'admin') {
         $userId,
         $userId
     ]);
-
 }
 
 
